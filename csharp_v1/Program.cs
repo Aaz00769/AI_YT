@@ -6,7 +6,7 @@ using SkiaSharp;
 
 class Program
 {
-    static readonly string Model = "qwen3:8b";
+    static readonly string Model = "qwen3:14b";
 
     static readonly string ProjectDir = Directory.GetCurrentDirectory();
     static readonly string OutputDir = Path.GetFullPath(Path.Combine(ProjectDir, "..", "output"));
@@ -19,7 +19,7 @@ class Program
 
         string script = await AskAi();
 
-        Console.WriteLine("\n=== EX_01 SCRIPT for qwen3:8b===");
+        Console.WriteLine("\n=== EX_01 SCRIPT for qwen3:14b===");
         Console.WriteLine(script);
 
         string voicePath = Path.Combine(OutputDir, "csharp_voice.wav");
@@ -54,7 +54,7 @@ class Program
         - cursed hardware humor
         - no markdown
         - only spoken words
-        -sey your model at the start of the script, like 
+        - say your model at the start of the script, like 14b qwen3 or something, so I can verify you are using the right one
         """;
 
         try
