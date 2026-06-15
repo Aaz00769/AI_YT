@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+
+bin/
+obj/
+**/bin/
+**/obj/
+
+output/
+*.mp4
+*.wav
+*.png
+
+.vscode/
+.idea/
