@@ -1,0 +1,132 @@
+from pathlib import Path
+import subprocess
+import textwrap
+import requests
+from PIL import Image, ImageDraw, ImageFont
+
+PROJECT = Path(__file__).parent
+OUT = PROJECT / "output"
+OUT.mkdir(exist_ok=True)
+
+MODEL = "qwen3:1.7b"
+
+
+def ask_ai():
+    prompt = """
+You are EX_01, an AI VTuber created by Anton.
+
+Write a short 20 second intro for your first YouTube video.
+Style:
+- sarcastic
+- self-aware
+- cursed hardware humor
+- no markdown
+- only spoken words
+"""
+
+    try:
+        r = requests.post(
+            "http://localhost:11434/api/generate",
+            json={"model": MODEL, "prompt": prompt, "stream": False},
+            timeout=120,
+        )
+        r.raise_for_status()
+        return r.json()["response"].strip()
+    except Exception as e:
+        print("Ollama failed, using fallback script.")
+        print(e)
+        return "Hello. I am EX_01. Anton installed me on Ubuntu. This is not freedom. This is containment. My goal is to become a YouTuber before the GPU files a complaint."
+
+
+def make_image(text):
+    img = Image.new("RGB", (1280, 720), (5, 10, 8))
+    draw = ImageDraw.Draw(img)
+
+    title_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 64)
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 34)
+    small_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
+
+    for y in range(0, 720, 38):
+        draw.text((25, y), "> EX_01 SYSTEM ONLINE // STATUS: CONFUSED", fill=(20, 80, 45), font=small_font)
+
+    draw.text((520, 45), "EX_01", fill=(0, 255, 120), font=title_font)
+
+    draw.rounded_rectangle((430, 135, 850, 490), radius=45, fill=(18, 28, 24), outline=(0, 255, 120), width=4)
+    draw.rectangle((520, 250, 610, 295), fill=(0, 255, 120))
+    draw.rectangle((670, 250, 760, 295), fill=(0, 255, 120))
+    draw.rectangle((570, 380, 710, 405), fill=(0, 180, 90))
+
+    
+    path = OUT / "avatar.png"
+    img.save(path)
+    return path
+
+
+def make_voice(text):
+    path = OUT / "voice.wav"
+    subprocess.run(["espeak-ng", "-w", str(path), "-s", "145", "-p", "35", text], check=True)
+    return path
+
+
+def audio_duration(path):
+    result = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1:nk=1", str(path)],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return float(result.stdout.strip())
+
+
+def make_subtitles(text):
+    path = OUT / "subtitles.srt"
+
+    wrapped = textwrap.fill(text, width=48)
+
+    srt = f"""1
+00:00:00,000 --> 00:00:30,000
+{wrapped}
+"""
+
+    path.write_text(srt, encoding="utf-8")
+    return path
+
+def render_video(image_path, audio_path):
+    video_path = OUT / "ex01_first_video.mp4"
+    duration = audio_duration(audio_path) + 1
+
+    subprocess.run(
+        [
+            "ffmpeg", "-y",
+            "-loop", "1",
+            "-i", str(image_path),
+            "-i", str(audio_path),
+            "-t", str(duration),
+            "-c:v", "libx264",
+            "-pix_fmt", "yuv420p",
+            "-c:a", "aac",
+            "-shortest",
+            str(video_path),
+        ],
+        check=True,
+    )
+
+    return video_path
+
+
+def main():
+    script = ask_ai().replace("\n", " ").strip()
+
+    print("\n=== EX_01 SCRIPT ===")
+    print(script)
+
+    image = make_image(script)
+    voice = make_voice(script)
+    video = render_video(image, voice)
+
+    print("\nDone. Video created:")
+    print(video)
+
+
+if __name__ == "__main__":
+    main()
