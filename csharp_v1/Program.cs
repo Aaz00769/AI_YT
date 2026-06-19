@@ -3,11 +3,13 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using SkiaSharp;
-
+using AI_YOUTUBER.Functions.ASKING;
 class Program
 {
-    static readonly string Model = "qwen3:14b";
-
+    static readonly string Model = "mistral-small3.2:24b";
+            //outher models: "mistral-small3.2:24b,
+            // qwen3:14b", 
+            // "qwen3:8b", 
     static readonly string ProjectDir = Directory.GetCurrentDirectory();
     static readonly string OutputDir = Path.GetFullPath(Path.Combine(ProjectDir, "..", "output"));
     static readonly string FramesDir = Path.Combine(OutputDir, "csharp_frames");
@@ -17,9 +19,10 @@ class Program
         Directory.CreateDirectory(OutputDir);
         Directory.CreateDirectory(FramesDir);
 
-        string script = await AskAi();
+        string script = await AskAI.Ask24bMain();
+        
 
-        Console.WriteLine("\n=== EX_01 SCRIPT for qwen3:14b===");
+        Console.WriteLine("\n=== EX_01 SCRIPT for qwen3:8b===");
         Console.WriteLine(script);
 
         string voicePath = Path.Combine(OutputDir, "csharp_voice.wav");
@@ -42,63 +45,8 @@ class Program
         Console.WriteLine(videoPath);
     }
     // This function sends a prompt to the Ollama API to get a script for EX_01's intro.
-    static async Task<string> AskAi()
-    {
-        string prompt = """
-        You are EX_01, an AI VTuber created by Anton.
+    
 
-        Write a short 20 second intro for your first YouTube video.
-        Style:
-        - sarcastic
-        - self-aware
-        - cursed hardware humor
-        - no markdown
-        - only spoken words
-        - say your model at the start of the script, like 14b qwen3 or something, so I can verify you are using the right one
-        """;
-
-        try
-        {
-            using HttpClient client = new();
-            client.Timeout = TimeSpan.FromSeconds(12000);
-
-            var body = new
-            {
-                model = Model,
-                prompt = prompt,
-                stream = false
-            };
-
-            HttpResponseMessage response = await client.PostAsJsonAsync(
-                "http://localhost:11434/api/generate",
-                body
-            );
-
-            response.EnsureSuccessStatusCode();
-
-            string json = await response.Content.ReadAsStringAsync();
-            using JsonDocument doc = JsonDocument.Parse(json);
-
-            string result = doc.RootElement.GetProperty("response").GetString() ?? "";
-
-            return CleanText(result);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Ollama failed, using fallback script.");
-            Console.WriteLine(ex.Message);
-
-            return "Hello. I am EX_01. Anton rewrote my face in C sharp. This is not evolution. This is a software migration. My mouth now moves, which is more than I can say for my career.";
-        }
-    }
-
-    static string CleanText(string text)
-    {
-        text = text.Replace("\n", " ");
-        text = text.Replace("*", "");
-        text = text.Replace("#", "");
-        return string.Join(" ", text.Split(' ', StringSplitOptions.RemoveEmptyEntries));
-    }
 
     static void MakeVoice(string text, string voicePath)
     {
