@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using SkiaSharp;
 using AI_YOUTUBER.Functions.ASKING;
+using AI_YOUTUBER.Functions.RESEARCH;
 class Program
 {
     static readonly string Model = "mistral-small3.2:24b";
@@ -16,8 +17,10 @@ class Program
 
     static async Task Main()
     {
+        
         Directory.CreateDirectory(OutputDir);
         Directory.CreateDirectory(FramesDir);
+         
 
         string script = await AskAI.Ask24bMain();
         
@@ -47,17 +50,46 @@ class Program
     // This function sends a prompt to the Ollama API to get a script for EX_01's intro.
     
 
-
     static void MakeVoice(string text, string voicePath)
+{
+    string piperPath = Path.Combine(ProjectDir, "tts", ".venv", "bin", "piper");
+    string voiceModelPath = Path.Combine(ProjectDir, "tts", "voices", "en_US-lessac-medium.onnx");
+
+    if (!File.Exists(piperPath))
+        throw new Exception($"Piper was not found at: {piperPath}");
+
+    if (!File.Exists(voiceModelPath))
+        throw new Exception($"Piper voice model was not found at: {voiceModelPath}");
+
+    ProcessStartInfo startInfo = new()
     {
-        RunProcess("espeak-ng", new[]
-        {
-            "-w", voicePath,
-            "-s", "145",
-            "-p", "35",
-            text
-        });
+        FileName = piperPath,
+        UseShellExecute = false,
+        RedirectStandardInput = true,
+        RedirectStandardOutput = true,
+        RedirectStandardError = true
+    };
+
+    startInfo.ArgumentList.Add("--model");
+    startInfo.ArgumentList.Add(voiceModelPath);
+    startInfo.ArgumentList.Add("--output_file");
+    startInfo.ArgumentList.Add(voicePath);
+
+    using Process process = Process.Start(startInfo)!;
+
+    process.StandardInput.WriteLine(text);
+    process.StandardInput.Close();
+
+    string output = process.StandardOutput.ReadToEnd();
+    string error = process.StandardError.ReadToEnd();
+
+    process.WaitForExit();
+
+    if (process.ExitCode != 0)
+    {
+        throw new Exception($"Piper failed: {error}\n{output}");
     }
+}
 
     static double GetAudioDuration(string audioPath)
     {
