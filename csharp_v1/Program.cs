@@ -22,10 +22,10 @@ class Program
         Directory.CreateDirectory(FramesDir);
          
 
-        string script = await AskAI.Ask24bMain();
+        string script = await AskAI.Ask24bMain(targetMinutes: 10, polishWith14b: false);
         
 
-        Console.WriteLine("\n=== EX_01 SCRIPT for qwen3:8b===");
+        Console.WriteLine("\n=== EX_01 SCRIPT ===");
         Console.WriteLine(script);
 
         string voicePath = Path.Combine(OutputDir, "csharp_voice.wav");
