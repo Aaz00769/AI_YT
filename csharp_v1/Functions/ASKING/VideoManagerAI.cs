@@ -130,8 +130,7 @@ public static class VideoManagerAI
             {
                 temperature = 0.3,
                 num_ctx = 4096,
-                num_predict = 2000,num_thread = 4,
-    num_gpu = 999
+                num_predict = 2000
             }
         };
 

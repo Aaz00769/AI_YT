@@ -156,9 +156,7 @@ public static class AskAI
                     TimeSpan.FromMinutes(90),
                     temperature: 0.75,
                     numCtx: 16384,
-                    numPredict: scriptPredictTokens,
-                    num_thread = 4,
-                    num_gpu = 999
+                    numPredict: scriptPredictTokens
                 );
 
                 result = result.Trim();

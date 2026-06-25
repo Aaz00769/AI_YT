@@ -261,8 +261,7 @@ public static class ResearchAI
                 prompt,
                 temperature: 0.2,
                 numCtx: 4096,
-                numPredict: 500,num_thread = 4,
-    num_gpu = 999
+                numPredict: 500
             );
         }
         catch (Exception ex)
@@ -344,9 +343,8 @@ public static class ResearchAI
             SummaryModel,
             prompt,
             temperature: 0.25,
-            numCtx: 4096,
-            numPredict: 450,num_thread = 4,
-    num_gpu = 999
+            numCtx: 4096
+            
         );
     }
 
@@ -405,9 +403,8 @@ public static class ResearchAI
             prompt,
             temperature: 0.3,
             numCtx: 8192,
-            numPredict: 1400,
-            num_thread = 4,
-            num_gpu = 999
+            numPredict: 1400
+            
         );
     }
 
