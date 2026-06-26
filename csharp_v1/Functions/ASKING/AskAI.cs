@@ -2,6 +2,8 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using AI_YOUTUBER.Functions.RESEARCH;
+using AI_YOUTUBER.Functions.PLANNING;
+using AI_YOUTUBER.Functions.MEMORY;
 
 namespace AI_YOUTUBER.Functions.ASKING;
 
@@ -28,7 +30,17 @@ public static class AskAI
 
             Console.WriteLine("[AskAI] Creating video research plan...");
 
-            VideoResearchPlan plan = await VideoManagerAI.CreatePlanAsync(targetMinutes);
+            EpisodeStrategyPlan strategy = await AlgorithmMaximizer.CreateStrategyAsync(targetMinutes);
+
+VideoResearchPlan plan = new(
+    Topic: strategy.Topic,
+    Angle: strategy.Angle,
+    ResearchQuestion: strategy.ResearchQuestion,
+    SearchQueries: strategy.SearchQueries
+);
+
+Console.WriteLine($"[AskAI] Episode type: {strategy.EpisodeType}");
+Console.WriteLine($"[AskAI] Hook: {strategy.Hook}");
 
             Console.WriteLine($"[AskAI] Topic: {plan.Topic}");
             Console.WriteLine($"[AskAI] Angle: {plan.Angle}");
@@ -55,14 +67,14 @@ public static class AskAI
 
                 research = """
                 Fallback research context:
-                AI video trends on YouTube include AI-generated Shorts, text-to-video tools,
+                AI video trends on YouTube include AI-generated Shorts, text-to-video tools, A lot of sex jokes 
                 faceless AI channels, AI voiceovers, automated editing, synthetic influencers,
                 AI-generated ads, AI music videos, automated scriptwriting, and creators using AI
                 to mass-produce content. Some of these trends are useful, but many feel generic,
                 soulless, spammy, low-effort, or perfect for sarcastic commentary.
 
                 Good angle for EX_01:
-                EX_01 is himself an AI YouTuber, but unlike polished corporate AI demos,
+                EX_01 is himself an AI YouTuber, but unlike polished corporate AI demos,and is horny and sexy,
                 he is running locally on cursed old hardware: a 2019 Dell Precision with 32 GB DDR4,
                 an i7-9750H, and a Quadro T1000. This makes him a funny contrast to glossy AI hype.
                 """;
@@ -140,7 +152,7 @@ public static class AskAI
                 - Make it sound like EX_01 is talking directly to the viewer.
                 - The script should be entertaining, but still make sense.
 
-                Extra research rule:
+                Extra research rule:(you should use this prefferebly)
                 If you just need more information before writing the script, return exactly this format and nothing else:
                 !SEARCH: your specific research question here
 
@@ -206,16 +218,24 @@ public static class AskAI
             }
 
             if (polishWith14b)
-            {
-                Console.WriteLine("[AskAI] Polishing script with 14B engagement manager...");
-                finalScript = await Ask14bAngCheck(finalScript, targetMinutes);
-            }
-            else
-            {
-                Console.WriteLine("[AskAI] Skipping 14B polish.");
-            }
+{
+    Console.WriteLine("[AskAI] Polishing script with 14B engagement manager...");
+    finalScript = await Ask14bAngCheck(finalScript, targetMinutes);
+}
+else
+{
+    Console.WriteLine("[AskAI] Skipping 14B polish.");
+}
 
-            return CleanText(finalScript);
+string cleanedScript = CleanText(finalScript);
+
+await VideoMemory.SaveVideoSummaryAsync(
+    strategy,
+    cleanedScript,
+    targetMinutes
+);
+
+return cleanedScript;
         }
         catch (Exception ex)
         {

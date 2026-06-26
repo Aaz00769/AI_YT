@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace AI_YOUTUBER.Functions.ASKING;
 
-public static class VideoManagerAI
+public static class ResearchManager
 {
     private static readonly HttpClient Client = new()
     {
@@ -15,76 +15,55 @@ public static class VideoManagerAI
 
     public static async Task<VideoResearchPlan> CreatePlanAsync(int targetMinutes)
     {
+        Console.WriteLine("[ResearchManager] Creating video research plan...");
+
         string prompt = $"""
-        You are EX_01's video topic manager.
+        /no_think
 
-        EX_01 is an AI VTuber created by Anton.
+        Create a video research plan.
 
-        Channel identity:
-        - local AI YouTuber
-        - cursed cheap hardware
-        - old/pre-2020 AI lab
-        - sarcastic commentary
-        - criticizes soulless AI trends
-        - talks about tech, AI, YouTube, creators, automation, and weird internet trends
+        Channel:
+        EX_01 is a sarcastic local AI YouTuber.
+        He talks about AI, YouTube, automation, creators, tech, and weird internet trends.
+        His style is funny, bitter, and self-aware.
 
         Target video length:
         {targetMinutes} minutes.
 
-        Your job:
-        Pick one clear video topic and create clean web search queries for research.
+        Return ONLY this exact format:
 
-        Search query rules:
-        - Search queries are for a search engine.
-        - Do NOT include EX_01.
-        - Do NOT include Anton.
-        - Do NOT include "roast".
-        - Do NOT include the full video prompt.
-        - Do NOT make long question-style queries.
-        - Make short, realistic search queries.
-
-        Good query examples:
-        - AI-generated YouTube videos trend 2026
-        - faceless AI YouTube channels 2026
-        - AI video tools creators use 2026
-        - YouTube synthetic influencers trend
-        - AI Shorts automation trend 2026
-
-        Return ONLY plain text in this exact format:
-
-        TOPIC: short topic name
-        ANGLE: the commentary angle
-        RESEARCH_QUESTION: what the research should answer
-        SEARCH_QUERY: query 1
-        SEARCH_QUERY: query 2
-        SEARCH_QUERY: query 3
-        SEARCH_QUERY: query 4
-        SEARCH_QUERY: query 5
+        TOPIC: AI topic Robots
+        ANGLE: commentary angle
+        RESEARCH_QUESTION: research question
+        SEARCH_QUERY: query one
+        SEARCH_QUERY: query two
+        SEARCH_QUERY: query three
+        SEARCH_QUERY: query four
+        SEARCH_QUERY: query five
 
         Rules:
-        - Do not return JSON.
-        - Do not use markdown.
-        - Do not add explanations.
-        - Do not write your reasoning.
-        - Do not include numbered lists.
-        - Output exactly one TOPIC line.
-        - Output exactly one ANGLE line.
-        - Output exactly one RESEARCH_QUESTION line.
-        - Output exactly five SEARCH_QUERY lines.
+        No JSON.
+        No markdown.
+        No reasoning.
+        No explanation.
+        No numbered list.
+        Exactly one TOPIC line.
+        Exactly one ANGLE line.
+        Exactly one RESEARCH_QUESTION line.
+        Exactly five SEARCH_QUERY lines.
+        Search queries must be short.
+        Search queries must be realistic.
+        Search queries must not mention EX_01.
+        Search queries must not mention Anton.
         """;
 
         try
         {
             string raw = await AskOllamaAsync(prompt);
 
-            Console.WriteLine("[VideoManager] Raw manager output:");
-            Console.WriteLine("---------- MANAGER OUTPUT START ----------");
-            Console.WriteLine(raw);
-            Console.WriteLine("---------- MANAGER OUTPUT END ------------");
-
             if (string.IsNullOrWhiteSpace(raw))
             {
-                Console.WriteLine("[VideoManager] ERROR: Manager returned empty output.");
+                Console.WriteLine("[ResearchManager] Manager returned empty output. Using fallback plan.");
                 return GetFallbackPlan();
             }
 
@@ -92,22 +71,22 @@ public static class VideoManagerAI
 
             if (plan is not null && plan.SearchQueries.Count >= 3)
             {
-                Console.WriteLine("[VideoManager] Plan parsed successfully.");
+                Console.WriteLine("[ResearchManager] Plan created successfully.");
                 PrintPlan(plan);
                 return plan;
             }
 
-            Console.WriteLine("[VideoManager] Failed to parse enough search queries. Using fallback plan.");
+            Console.WriteLine("[ResearchManager] Failed to parse enough search queries. Using fallback plan.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("[VideoManager] Manager model failed. Using fallback plan.");
-            Console.WriteLine(ex.Message);
+            Console.WriteLine("[ResearchManager] Manager model failed. Using fallback plan.");
+            Console.WriteLine($"[ResearchManager] Error: {ex.Message}");
         }
 
         VideoResearchPlan fallback = GetFallbackPlan();
 
-        Console.WriteLine("[VideoManager] Fallback plan:");
+        Console.WriteLine("[ResearchManager] Fallback plan:");
         PrintPlan(fallback);
 
         return fallback;
@@ -118,31 +97,24 @@ public static class VideoManagerAI
         var body = new
         {
             model = ManagerModel,
-
-            // Qwen3 tends to waste output tokens on thinking.
-            // /no_think reduces that. think=false helps if your Ollama version supports it.
-            prompt = "/no_think\n" + prompt,
-
+            prompt,
             stream = false,
             think = false,
-
             options = new
             {
-                temperature = 0.3,
-                num_ctx = 4096,
-                num_predict = 2000
+                temperature = 0.1,
+                num_ctx = 2048,
+                num_predict = 800
             }
         };
 
-        Console.WriteLine("[VideoManager] Sending request to Ollama...");
-        Console.WriteLine($"[VideoManager] Model: {ManagerModel}");
-        Console.WriteLine($"[VideoManager] Prompt length: {prompt.Length}");
+        Console.WriteLine($"[ResearchManager] Asking model: {ManagerModel}");
 
         using HttpResponseMessage response = await Client.PostAsJsonAsync(OllamaUrl, body);
 
         string json = await response.Content.ReadAsStringAsync();
 
-        Console.WriteLine($"[VideoManager] HTTP status: {(int)response.StatusCode} {response.StatusCode}");
+        Console.WriteLine($"[ResearchManager] HTTP status: {(int)response.StatusCode} {response.StatusCode}");
 
         response.EnsureSuccessStatusCode();
 
@@ -153,34 +125,25 @@ public static class VideoManagerAI
         if (root.TryGetProperty("done_reason", out JsonElement doneReasonElement))
         {
             string doneReason = doneReasonElement.GetString() ?? "";
-            Console.WriteLine($"[VideoManager] Done reason: {doneReason}");
-
-            if (doneReason.Equals("length", StringComparison.OrdinalIgnoreCase))
-            {
-                Console.WriteLine("[VideoManager] WARNING: Manager output hit token limit.");
-            }
+            Console.WriteLine($"[ResearchManager] Done reason: {doneReason}");
         }
 
         if (root.TryGetProperty("eval_count", out JsonElement evalCountElement))
         {
-            Console.WriteLine($"[VideoManager] Output tokens: {evalCountElement.GetInt32()}");
+            Console.WriteLine($"[ResearchManager] Output tokens: {evalCountElement.GetInt32()}");
         }
 
         if (!root.TryGetProperty("response", out JsonElement responseElement))
         {
-            Console.WriteLine("[VideoManager] ERROR: Ollama JSON has no 'response' property.");
+            Console.WriteLine("[ResearchManager] Ollama JSON has no response field.");
             return "";
         }
 
-        string modelOutput = responseElement.GetString() ?? "";
-
-        return modelOutput.Trim();
+        return (responseElement.GetString() ?? "").Trim();
     }
 
     private static VideoResearchPlan? TryParsePlan(string raw)
     {
-        Console.WriteLine("[VideoManager] Parsing manager output...");
-
         string topic = "";
         string angle = "";
         string researchQuestion = "";
@@ -232,28 +195,16 @@ public static class VideoManagerAI
             .ToList();
 
         if (string.IsNullOrWhiteSpace(topic))
-        {
-            Console.WriteLine("[VideoManager] Parse failed: missing TOPIC.");
             return null;
-        }
 
         if (string.IsNullOrWhiteSpace(angle))
-        {
-            Console.WriteLine("[VideoManager] Parse failed: missing ANGLE.");
             return null;
-        }
 
         if (string.IsNullOrWhiteSpace(researchQuestion))
-        {
-            Console.WriteLine("[VideoManager] Parse failed: missing RESEARCH_QUESTION.");
             return null;
-        }
 
         if (searchQueries.Count < 3)
-        {
-            Console.WriteLine($"[VideoManager] Parse failed: only {searchQueries.Count} SEARCH_QUERY line(s). Need at least 3.");
             return null;
-        }
 
         return new VideoResearchPlan(
             Topic: topic,
@@ -277,14 +228,14 @@ public static class VideoManagerAI
 
     private static void PrintPlan(VideoResearchPlan plan)
     {
-        Console.WriteLine($"[VideoManager] Topic: {plan.Topic}");
-        Console.WriteLine($"[VideoManager] Angle: {plan.Angle}");
-        Console.WriteLine($"[VideoManager] Research question: {plan.ResearchQuestion}");
-        Console.WriteLine("[VideoManager] Search queries:");
+        Console.WriteLine($"[ResearchManager] Topic: {plan.Topic}");
+        Console.WriteLine($"[ResearchManager] Angle: {plan.Angle}");
+        Console.WriteLine($"[ResearchManager] Research question: {plan.ResearchQuestion}");
+        Console.WriteLine("[ResearchManager] Search queries:");
 
         foreach (string query in plan.SearchQueries)
         {
-            Console.WriteLine($"[VideoManager] - {query}");
+            Console.WriteLine($"[ResearchManager] - {query}");
         }
     }
 
