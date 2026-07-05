@@ -21,8 +21,8 @@ class Program
         Directory.CreateDirectory(OutputDir);
         Directory.CreateDirectory(FramesDir);
          
-
-        string script = await AskAI.Ask24bMain(targetMinutes: 10, polishWith14b: false);
+        int targetMin=int.Parse(Console.ReadLine()); 
+        string script = await AskAI.Ask24bMain(targetMinutes: targetMin , polishWith14b: false);
         
 
         Console.WriteLine("\n=== EX_01 SCRIPT ===");
