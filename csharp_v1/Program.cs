@@ -21,7 +21,7 @@ class Program
         Directory.CreateDirectory(OutputDir);
         Directory.CreateDirectory(FramesDir);
          
-        Console.WriteLine("====write video minutes===="); 
+        Console.WriteLine("====write video minutes====Works1"); 
         int targetMin=int.Parse(Console.ReadLine()); 
         string script = await AskAI.Ask24bMain(targetMinutes: targetMin , polishWith14b: false);
         
