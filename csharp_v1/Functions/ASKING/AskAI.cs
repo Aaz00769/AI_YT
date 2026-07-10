@@ -9,7 +9,7 @@ namespace AI_YOUTUBER.Functions.ASKING;
 
 public static class AskAI
 {
-    public static async Task<string> Ask24bMain(int targetMinutes = 10, bool polishWith14b = false)
+    public static async Task<string> Ask24bMain(int targetMinutes , bool polishWith14b)
     {
         targetMinutes = Math.Clamp(targetMinutes, 1, 20);
 
