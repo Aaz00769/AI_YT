@@ -29,7 +29,7 @@ class Program
         Console.WriteLine("true/false");
         bool polish = bool.Parse(Console.ReadLine()); 
         bool polishWith14b=polish;
-
+        EpisodeStrategyPlan strategy = await AlgorithmMaximizer.CreateStrategyAsync(targetMin);
         string script = await AskAI.Ask24bMain(targetMin , polishWith14b);
         
 

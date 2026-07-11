@@ -9,7 +9,7 @@ namespace AI_YOUTUBER.Functions.ASKING;
 
 public static class AskAI
 {
-    public static async Task<string> Ask24bMain(int targetMinutes , bool polishWith14b)
+    public static async Task<string> Ask24bMain(int targetMinutes , bool polishWith14b ,EpisodeStrategyPlan strategy)
     {
         targetMinutes = Math.Clamp(targetMinutes, 1, 20);
 
@@ -30,7 +30,7 @@ public static class AskAI
 
             Console.WriteLine("[AskAI] Creating video research plan...");
 
-            EpisodeStrategyPlan strategy = await AlgorithmMaximizer.CreateStrategyAsync(targetMinutes);
+           
 
 VideoResearchPlan plan = new(
     Topic: strategy.Topic,
