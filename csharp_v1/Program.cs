@@ -5,6 +5,7 @@ using System.Text.Json;
 using SkiaSharp;
 using AI_YOUTUBER.Functions.ASKING;
 using AI_YOUTUBER.Functions.RESEARCH;
+using AI_YOUTUBER.Functions.PLANNING;
 class Program
 {
     static readonly string Model = "mistral-small3.2:24b";
