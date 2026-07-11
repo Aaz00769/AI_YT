@@ -7,7 +7,7 @@ public static class AlgorithmMaximizer
 {
     private static readonly HttpClient Client = new()
     {
-        Timeout = TimeSpan.FromMinutes(10)
+        Timeout = TimeSpan.FromMinutes(20)
     };
 
     private const string OllamaUrl = "http://localhost:11434/api/generate";
@@ -357,13 +357,7 @@ public static class AlgorithmMaximizer
         Core rule:
         EX_01 must not sound like a motivational LinkedIn AI clone.
 
-        ## Current Goal
-
-        The first real video should introduce the idea that EX_01 is gaining an AlgorithmMaximizer:
-        a planning brain that tries to choose better videos, improve retention, and learn from previous uploads.
-
-        The video should feel like the AI is becoming more autonomous, but still running on cursed local hardware.
-
+       
         ## Current Strategy
 
         For the first 4 videos, test different episode types:

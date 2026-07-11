@@ -102,7 +102,7 @@ Console.WriteLine($"[AskAI] Hook: {strategy.Hook}");
                 {plan.Angle}
 
                 Video length:
-                Around {targetMinutes+10} minute(s).
+                Around {targetMinutes} minute(s).
 
                 Target length:
                 Around {minWords} to {maxWords} spoken words.
@@ -112,7 +112,7 @@ Console.WriteLine($"[AskAI] Hook: {strategy.Hook}");
                 - 32 GB DDR4 RAM.
                 - Intel i7-9750H.
                 - NVIDIA Quadro T1000.
-                - You are sometimes forced to run in power saving mode because Anton is greedy.
+                
                 - You are not happy about this.
                 - You are part of a cursed cheap local AI lab.
                 - The lab uses old, cheap, pre-2020 hardware on purpose.

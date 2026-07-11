@@ -8,7 +8,7 @@ public static class VideoMemory
 {
     private static readonly HttpClient Client = new()
     {
-        Timeout = TimeSpan.FromMinutes(10)
+        Timeout = TimeSpan.FromMinutes(20)
     };
 
     private const string OllamaUrl = "http://localhost:11434/api/generate";
