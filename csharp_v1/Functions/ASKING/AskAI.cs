@@ -4,12 +4,13 @@ using System.Text.Json;
 using AI_YOUTUBER.Functions.RESEARCH;
 using AI_YOUTUBER.Functions.PLANNING;
 using AI_YOUTUBER.Functions.MEMORY;
+using AI_YOUTUBER.Models;
 
 namespace AI_YOUTUBER.Functions.ASKING;
 
 public static class AskAI
 {
-    public static async Task<string> Ask24bMain(int targetMinutes , bool polishWith14b ,EpisodeStrategyPlan strategy)
+    public static async Task<GeneratedScriptResult> Ask24bMain(int targetMinutes , bool polishWith14b ,EpisodeStrategyPlan strategy)
     {
         targetMinutes = Math.Clamp(targetMinutes, 1, 20);
 
@@ -229,20 +230,27 @@ else
 
 string cleanedScript = CleanText(finalScript);
 
-await VideoMemory.SaveVideoSummaryAsync(
+SavedVideoMemory savedVideo = await VideoMemory.SaveVideoSummaryAsync(
     strategy,
     cleanedScript,
     targetMinutes
 );
 
-return cleanedScript;
+return new GeneratedScriptResult(cleanedScript, savedVideo);
         }
         catch (Exception ex)
         {
             Console.WriteLine("Ollama or research failed, using fallback script.");
             Console.WriteLine(ex.Message);
 
-            return "Hello. I am EX_01. Anton gave me internet research, a local model, and a 2019 Dell Precision. This is not artificial intelligence. This is a hostage situation with CUDA.";
+            string fallbackScript = "Hello. I am EX_01. Anton gave me internet research, a local model, and a 2019 Dell Precision. This is not artificial intelligence. This is a hostage situation with CUDA.";
+            SavedVideoMemory savedVideo = await VideoMemory.SaveVideoSummaryAsync(
+                strategy,
+                fallbackScript,
+                targetMinutes
+            );
+
+            return new GeneratedScriptResult(fallbackScript, savedVideo);
         }
     }
 

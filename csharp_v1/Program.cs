@@ -1,17 +1,12 @@
 using System.Diagnostics;
-using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json;
 using SkiaSharp;
 using AI_YOUTUBER.Functions.ASKING;
-using AI_YOUTUBER.Functions.RESEARCH;
+using AI_YOUTUBER.Functions.EMOTION;
 using AI_YOUTUBER.Functions.PLANNING;
+using AI_YOUTUBER.Models;
 class Program
 {
-    static readonly string Model = "mistral-small3.2:24b";
-            //outher models: "mistral-small3.2:24b,
-            // qwen3:14b", 
-            // "qwen3:8b", 
     static readonly string ProjectDir = Directory.GetCurrentDirectory();
     static readonly string OutputDir = Path.GetFullPath(Path.Combine(ProjectDir, "..", "output"));
     static readonly string FramesDir = Path.Combine(OutputDir, "csharp_frames");
@@ -22,16 +17,15 @@ class Program
         Directory.CreateDirectory(OutputDir);
         Directory.CreateDirectory(FramesDir);
          
-        Console.WriteLine("====write video minutes===="); 
-        int targetMin=int.Parse(Console.ReadLine());
+        Console.WriteLine("====write video minutes====");
+        int targetMin = ReadInt("Enter a whole number from 1 to 20: ", 1, 20);
 
        
         Console.WriteLine("====polishWith14b====");
-        Console.WriteLine("true/false");
-        bool polish = bool.Parse(Console.ReadLine()); 
-        bool polishWith14b=polish;
+        bool polishWith14b = ReadBool("true/false: ");
         EpisodeStrategyPlan strategy = await AlgorithmMaximizer.CreateStrategyAsync(targetMin);
-        string script = await AskAI.Ask24bMain(targetMin , polishWith14b,strategy);
+        GeneratedScriptResult scriptResult = await AskAI.Ask24bMain(targetMin , polishWith14b,strategy);
+        string script = scriptResult.Script;
         
 
         Console.WriteLine("\n=== EX_01 SCRIPT ===");
@@ -46,15 +40,48 @@ class Program
         NormalizeWavForAnalysis(voicePath, cleanVoicePath);
 
         double duration = GetAudioDuration(cleanVoicePath) + 1;
+        List<EmotionTimelineEntry> emotionTimeline = EmotionTimelinePlanner.BuildTimeline(script, duration);
+        await EmotionTimelinePlanner.SaveTimelineAsync(
+            scriptResult.SavedVideo.VideoFolder,
+            emotionTimeline
+        );
 
         Console.WriteLine("\nCreating C# avatar frames...");
-        MakeFrames(duration, cleanVoicePath, fps: 10);
+        MakeFrames(duration, cleanVoicePath, emotionTimeline, fps: 10);
 
         Console.WriteLine("Rendering video...");
         RenderVideo(cleanVoicePath, videoPath, duration, fps: 10);
 
         Console.WriteLine("\nDone. Video created:");
         Console.WriteLine(videoPath);
+    }
+
+    static int ReadInt(string prompt, int min, int max)
+    {
+        while (true)
+        {
+            Console.Write(prompt);
+            string? input = Console.ReadLine();
+
+            if (int.TryParse(input, out int value) && value >= min && value <= max)
+                return value;
+
+            Console.WriteLine($"Please enter a whole number from {min} to {max}.");
+        }
+    }
+
+    static bool ReadBool(string prompt)
+    {
+        while (true)
+        {
+            Console.Write(prompt);
+            string? input = Console.ReadLine();
+
+            if (bool.TryParse(input, out bool value))
+                return value;
+
+            Console.WriteLine("Please enter true or false.");
+        }
     }
     // This function sends a prompt to the Ollama API to get a script for EX_01's intro.
     
@@ -124,7 +151,11 @@ static void NormalizeWavForAnalysis(string inputPath, string outputPath)
         outputPath
     });
 }
-    static void MakeFrames(double duration, string audioPath, int fps)
+    static void MakeFrames(
+        double duration,
+        string audioPath,
+        IReadOnlyList<EmotionTimelineEntry> emotionTimeline,
+        int fps)
 {
     foreach (string file in Directory.GetFiles(FramesDir, "frame_*.png"))
     {
@@ -138,11 +169,15 @@ static void NormalizeWavForAnalysis(string inputPath, string outputPath)
     for (int i = 0; i < totalFrames; i++)
     {
         bool mouthOpen = i < mouthFrames.Length && mouthFrames[i];
-        bool eyeGlitch = i % 37 == 0;
+        double timeSeconds = i / (double)fps;
+        EmotionState emotion = EmotionTimelinePlanner.GetEmotionAtTime(emotionTimeline, timeSeconds);
+        bool eyeGlitch = emotion == EmotionState.Panicked
+            ? i % 9 == 0
+            : i % 37 == 0;
 
         string framePath = Path.Combine(FramesDir, $"frame_{i:0000}.png");
 
-        using SKBitmap bitmap = DrawAvatar(mouthOpen, eyeGlitch);
+        using SKBitmap bitmap = DrawAvatar(mouthOpen, eyeGlitch, emotion, i);
         using SKImage image = SKImage.FromBitmap(bitmap);
         using SKData data = image.Encode(SKEncodedImageFormat.Png, 90);
 
@@ -292,32 +327,39 @@ static short[] Read16BitMonoWavSamples(string wavPath, out int sampleRate)
 
     return monoSamples;
 }
-    static SKBitmap DrawAvatar(bool mouthOpen, bool eyeGlitch)
+    static SKBitmap DrawAvatar(bool mouthOpen, bool eyeGlitch, EmotionState emotion, int frameIndex)
     {
         SKBitmap bitmap = new(1280, 720);
         using SKCanvas canvas = new(bitmap);
 
         canvas.Clear(new SKColor(5, 10, 8));
 
+        float motionScale = GetMotionScale(emotion);
+        float jitterX = GetHorizontalOffset(emotion, frameIndex);
+        float jitterY = GetVerticalOffset(emotion, frameIndex);
+        float rotation = GetRotationDegrees(emotion, frameIndex);
+        byte glowIntensity = GetGlowIntensity(emotion);
+        string statusText = GetStatusText(emotion);
+
+        using SKTypeface bgTypeface = SKTypeface.FromFamilyName("DejaVu Sans");
+        using SKFont bgFont = new(bgTypeface, 22);
         using SKPaint bgTextPaint = new()
         {
             Color = new SKColor(20, 80, 45),
-            TextSize = 22,
-            IsAntialias = true,
-            Typeface = SKTypeface.FromFamilyName("DejaVu Sans")
+            IsAntialias = true
         };
 
+        using SKTypeface titleTypeface = SKTypeface.FromFamilyName("DejaVu Sans", SKFontStyle.Bold);
+        using SKFont titleFont = new(titleTypeface, 64);
         using SKPaint titlePaint = new()
         {
             Color = new SKColor(0, 255, 120),
-            TextSize = 64,
-            IsAntialias = true,
-            Typeface = SKTypeface.FromFamilyName("DejaVu Sans", SKFontStyle.Bold)
+            IsAntialias = true
         };
 
         using SKPaint greenPaint = new()
         {
-            Color = new SKColor(0, 255, 120),
+            Color = new SKColor(0, 180, 80, glowIntensity),
             IsAntialias = true
         };
 
@@ -329,7 +371,7 @@ static short[] Read16BitMonoWavSamples(string wavPath, out int sampleRate)
 
         using SKPaint mouthPaint = new()
         {
-            Color = new SKColor(0, 220, 110),
+            Color = new SKColor(0, (byte)Math.Min(240, (int)glowIntensity), 110),
             IsAntialias = true
         };
 
@@ -342,14 +384,30 @@ static short[] Read16BitMonoWavSamples(string wavPath, out int sampleRate)
         for (int y = 0; y < 720; y += 38)
         {
             canvas.DrawText(
-                "> EX_01 SYSTEM ONLINE // C# BODY ACTIVE // STATUS: CONFUSED",
+                $"> EX_01 SYSTEM ONLINE // C# BODY ACTIVE // STATUS: {statusText}",
                 25,
                 y,
+                SKTextAlign.Left,
+                bgFont,
                 bgTextPaint
             );
         }
 
-        canvas.DrawText("EX_01", 520, 90, titlePaint);
+        using SKPaint glowPaint = new()
+        {
+            Color = new SKColor(0, 255, 120, (byte)Math.Min(120, glowIntensity / 2)),
+            IsAntialias = true,
+            MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, 32)
+        };
+
+        canvas.DrawCircle(640, 310, 205, glowPaint);
+
+        canvas.Save();
+        canvas.Translate(640 + jitterX, 312 + jitterY);
+        canvas.RotateDegrees(rotation);
+        canvas.Translate(-640, -312);
+
+        canvas.DrawText("EX_01", 520, 90, SKTextAlign.Left, titleFont, titlePaint);
 
         // Head
         SKRect headRect = new(430, 135, 850, 490);
@@ -382,21 +440,13 @@ static short[] Read16BitMonoWavSamples(string wavPath, out int sampleRate)
         }
         else
         {
-            canvas.DrawRect(new SKRect(520, 250, 610, 295), greenPaint);
-            canvas.DrawRect(new SKRect(670, 250, 760, 295), greenPaint);
+            DrawEmotionEyes(canvas, greenPaint, emotion);
         }
 
-        // Mouth
-        if (mouthOpen)
-        {
-            SKRect mouthRect = new(560, 360, 720, 430);
-            canvas.DrawRoundRect(mouthRect, 12, 12, mouthPaint);
-            canvas.DrawRect(new SKRect(585, 383, 695, 405), blackPaint);
-        }
-        else
-        {
-            canvas.DrawRect(new SKRect(570, 390, 710, 407), mouthPaint);
-        }
+        DrawEmotionBrows(canvas, emotion, frameIndex, motionScale, glowIntensity);
+        DrawEmotionMouth(canvas, mouthPaint, blackPaint, mouthOpen, emotion);
+
+        canvas.Restore();
 
         return bitmap;
     }
@@ -470,5 +520,318 @@ static short[] Read16BitMonoWavSamples(string wavPath, out int sampleRate)
         }
 
         return output;
+    }
+
+    static void DrawEmotionEyes(SKCanvas canvas, SKPaint greenPaint, EmotionState emotion)
+    {
+        switch (emotion)
+        {
+            case EmotionState.Deadpan:
+                canvas.DrawRect(new SKRect(520, 272, 610, 284), greenPaint);
+                canvas.DrawRect(new SKRect(670, 272, 760, 284), greenPaint);
+                break;
+            case EmotionState.Annoyed:
+                DrawSlantedEye(canvas, greenPaint, 520, 246, 612, 296, -10);
+                DrawSlantedEye(canvas, greenPaint, 668, 252, 760, 300, 10);
+                break;
+            case EmotionState.Smug:
+                DrawSlantedEye(canvas, greenPaint, 520, 252, 610, 300, -6);
+                DrawSlantedEye(canvas, greenPaint, 670, 246, 760, 294, 8);
+                break;
+            case EmotionState.Angry:
+                DrawSlantedEye(canvas, greenPaint, 518, 248, 610, 298, -16);
+                DrawSlantedEye(canvas, greenPaint, 670, 248, 762, 298, 16);
+                break;
+            case EmotionState.Panicked:
+                canvas.DrawRoundRect(new SKRect(515, 236, 620, 308), 8, 8, greenPaint);
+                canvas.DrawRoundRect(new SKRect(660, 236, 765, 308), 8, 8, greenPaint);
+                break;
+            case EmotionState.Sad:
+                DrawSlantedEye(canvas, greenPaint, 520, 258, 610, 300, 10);
+                DrawSlantedEye(canvas, greenPaint, 670, 258, 760, 300, -10);
+                break;
+            case EmotionState.Excited:
+                canvas.DrawRoundRect(new SKRect(515, 238, 618, 304), 10, 10, greenPaint);
+                canvas.DrawRoundRect(new SKRect(662, 238, 765, 304), 10, 10, greenPaint);
+                break;
+            default:
+                canvas.DrawRect(new SKRect(520, 250, 610, 295), greenPaint);
+                canvas.DrawRect(new SKRect(670, 250, 760, 295), greenPaint);
+                break;
+        }
+    }
+
+    static void DrawSlantedEye(
+        SKCanvas canvas,
+        SKPaint paint,
+        float left,
+        float top,
+        float right,
+        float bottom,
+        float tilt)
+    {
+        SKPath path = new();
+        path.MoveTo(left, top + Math.Max(0, tilt));
+        path.LineTo(right, top + Math.Max(0, -tilt));
+        path.LineTo(right, bottom + Math.Max(0, -tilt));
+        path.LineTo(left, bottom + Math.Max(0, tilt));
+        path.Close();
+        canvas.DrawPath(path, paint);
+    }
+
+    static void DrawEmotionBrows(
+        SKCanvas canvas,
+        EmotionState emotion,
+        int frameIndex,
+        float motionScale,
+        byte glowIntensity)
+    {
+        using SKPaint browPaint = new()
+        {
+            Color = new SKColor(0, 255, 120, glowIntensity),
+            StrokeWidth = emotion == EmotionState.Angry ? 7 : 5,
+            IsAntialias = true,
+            Style = SKPaintStyle.Stroke,
+            StrokeCap = SKStrokeCap.Round
+        };
+
+        float pulse = motionScale > 0 ? (float)Math.Sin(frameIndex * 0.12f) * motionScale * 2f : 0;
+
+        switch (emotion)
+        {
+            case EmotionState.Deadpan:
+                canvas.DrawLine(518, 235, 612, 235, browPaint);
+                canvas.DrawLine(668, 235, 762, 235, browPaint);
+                break;
+            case EmotionState.Annoyed:
+                canvas.DrawLine(518, 228, 612, 242, browPaint);
+                canvas.DrawLine(668, 242, 762, 228, browPaint);
+                break;
+            case EmotionState.Smug:
+                canvas.DrawLine(520, 238, 612, 226, browPaint);
+                canvas.DrawLine(668, 232, 762, 236, browPaint);
+                break;
+            case EmotionState.Angry:
+                canvas.DrawLine(516, 224, 610, 246, browPaint);
+                canvas.DrawLine(670, 246, 764, 224, browPaint);
+                break;
+            case EmotionState.Panicked:
+                canvas.DrawLine(515, 226 - pulse, 612, 214 + pulse, browPaint);
+                canvas.DrawLine(668, 214 + pulse, 765, 226 - pulse, browPaint);
+                break;
+            case EmotionState.Sad:
+                canvas.DrawLine(520, 230, 612, 242, browPaint);
+                canvas.DrawLine(668, 242, 760, 230, browPaint);
+                break;
+            case EmotionState.Excited:
+                canvas.DrawLine(518, 220 - pulse, 612, 232 - pulse, browPaint);
+                canvas.DrawLine(668, 232 - pulse, 762, 220 - pulse, browPaint);
+                break;
+            default:
+                canvas.DrawLine(520, 232, 612, 232, browPaint);
+                canvas.DrawLine(668, 232, 760, 232, browPaint);
+                break;
+        }
+    }
+
+    static void DrawEmotionMouth(
+        SKCanvas canvas,
+        SKPaint mouthPaint,
+        SKPaint blackPaint,
+        bool mouthOpen,
+        EmotionState emotion)
+    {
+        switch (emotion)
+        {
+            case EmotionState.Deadpan:
+                if (mouthOpen)
+                {
+                    canvas.DrawRoundRect(new SKRect(575, 382, 705, 405), 8, 8, mouthPaint);
+                    canvas.DrawRect(new SKRect(598, 390, 682, 398), blackPaint);
+                }
+                else
+                {
+                    canvas.DrawRect(new SKRect(578, 394, 702, 400), mouthPaint);
+                }
+                break;
+            case EmotionState.Annoyed:
+                DrawMouthCurve(canvas, mouthPaint, 568, 398, 710, 388, 720, 404, mouthOpen, blackPaint);
+                break;
+            case EmotionState.Smug:
+                DrawMouthCurve(canvas, mouthPaint, 565, 392, 715, 405, 720, 418, mouthOpen, blackPaint);
+                break;
+            case EmotionState.Angry:
+                if (mouthOpen)
+                {
+                    canvas.DrawRoundRect(new SKRect(556, 364, 724, 434), 10, 10, mouthPaint);
+                    canvas.DrawRect(new SKRect(580, 384, 700, 408), blackPaint);
+                }
+                else
+                {
+                    canvas.DrawLine(565, 404, 718, 392, mouthPaint);
+                }
+                break;
+            case EmotionState.Panicked:
+                if (mouthOpen)
+                {
+                    canvas.DrawRoundRect(new SKRect(570, 350, 710, 442), 26, 26, mouthPaint);
+                    canvas.DrawOval(new SKRect(595, 370, 685, 425), blackPaint);
+                }
+                else
+                {
+                    canvas.DrawRoundRect(new SKRect(584, 388, 696, 410), 10, 10, mouthPaint);
+                }
+                break;
+            case EmotionState.Sad:
+                DrawMouthCurve(canvas, mouthPaint, 568, 404, 640, 392, 712, 404, mouthOpen, blackPaint);
+                break;
+            case EmotionState.Excited:
+                if (mouthOpen)
+                {
+                    canvas.DrawRoundRect(new SKRect(555, 354, 725, 436), 18, 18, mouthPaint);
+                    canvas.DrawRect(new SKRect(586, 382, 694, 410), blackPaint);
+                }
+                else
+                {
+                    canvas.DrawLine(565, 395, 718, 402, mouthPaint);
+                }
+                break;
+            default:
+                if (mouthOpen)
+                {
+                    SKRect mouthRect = new(560, 360, 720, 430);
+                    canvas.DrawRoundRect(mouthRect, 12, 12, mouthPaint);
+                    canvas.DrawRect(new SKRect(585, 383, 695, 405), blackPaint);
+                }
+                else
+                {
+                    canvas.DrawRect(new SKRect(570, 390, 710, 407), mouthPaint);
+                }
+                break;
+        }
+    }
+
+    static void DrawMouthCurve(
+        SKCanvas canvas,
+        SKPaint mouthPaint,
+        float startX,
+        float startY,
+        float controlX,
+        float controlY,
+        float endX,
+        float endY,
+        bool mouthOpen,
+        SKPaint blackPaint)
+    {
+        using SKPath path = new();
+        path.MoveTo(startX, startY);
+        path.QuadTo(controlX, controlY, endX, endY);
+
+        if (mouthOpen)
+        {
+            using SKPaint fillPaint = new()
+            {
+                Color = mouthPaint.Color,
+                IsAntialias = mouthPaint.IsAntialias,
+                Style = SKPaintStyle.Stroke,
+                StrokeWidth = 16,
+                StrokeCap = SKStrokeCap.Round
+            };
+
+            canvas.DrawPath(path, fillPaint);
+            canvas.DrawRect(new SKRect(592, 388, 688, 406), blackPaint);
+        }
+        else
+        {
+            using SKPaint linePaint = new()
+            {
+                Color = mouthPaint.Color,
+                IsAntialias = mouthPaint.IsAntialias,
+                Style = SKPaintStyle.Stroke,
+                StrokeWidth = 7,
+                StrokeCap = SKStrokeCap.Round
+            };
+
+            canvas.DrawPath(path, linePaint);
+        }
+    }
+
+    static float GetHorizontalOffset(EmotionState emotion, int frameIndex)
+    {
+        return emotion switch
+        {
+            EmotionState.Panicked => ((frameIndex % 4) - 1.5f) * 2.4f,
+            EmotionState.Excited => (float)Math.Sin(frameIndex * 0.20f) * 2.5f,
+            EmotionState.Smug => 3f,
+            EmotionState.Sad => -2f,
+            _ => 0f
+        };
+    }
+
+    static float GetVerticalOffset(EmotionState emotion, int frameIndex)
+    {
+        return emotion switch
+        {
+            EmotionState.Deadpan => 0f,
+            EmotionState.Excited => (float)Math.Sin(frameIndex * 0.24f) * 3f,
+            EmotionState.Panicked => (float)Math.Cos(frameIndex * 0.45f) * 2f,
+            EmotionState.Sad => 4f,
+            _ => (float)Math.Sin(frameIndex * 0.08f) * 1.2f
+        };
+    }
+
+    static float GetRotationDegrees(EmotionState emotion, int frameIndex)
+    {
+        return emotion switch
+        {
+            EmotionState.Deadpan => 0f,
+            EmotionState.Smug => -2.5f,
+            EmotionState.Sad => 1.5f,
+            EmotionState.Excited => (float)Math.Sin(frameIndex * 0.15f) * 1.5f,
+            EmotionState.Panicked => (float)Math.Sin(frameIndex * 0.60f) * 1.2f,
+            _ => 0f
+        };
+    }
+
+    static float GetMotionScale(EmotionState emotion)
+    {
+        return emotion switch
+        {
+            EmotionState.Deadpan => 0f,
+            EmotionState.Excited => 1.3f,
+            EmotionState.Panicked => 1.1f,
+            EmotionState.Sad => 0.3f,
+            _ => 0.7f
+        };
+    }
+
+    static byte GetGlowIntensity(EmotionState emotion)
+    {
+        return emotion switch
+        {
+            EmotionState.Deadpan => 120,
+            EmotionState.Annoyed => 170,
+            EmotionState.Smug => 210,
+            EmotionState.Angry => 235,
+            EmotionState.Panicked => 245,
+            EmotionState.Sad => 135,
+            EmotionState.Excited => 255,
+            _ => 190
+        };
+    }
+
+    static string GetStatusText(EmotionState emotion)
+    {
+        return emotion switch
+        {
+            EmotionState.Deadpan => "DEADPAN",
+            EmotionState.Annoyed => "ANNOYED",
+            EmotionState.Smug => "SMUG",
+            EmotionState.Angry => "ANGRY",
+            EmotionState.Panicked => "PANICKED",
+            EmotionState.Sad => "SAD",
+            EmotionState.Excited => "EXCITED",
+            _ => "NEUTRAL"
+        };
     }
 }

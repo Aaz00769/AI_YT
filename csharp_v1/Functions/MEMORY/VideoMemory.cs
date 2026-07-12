@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using AI_YOUTUBER.Functions.PLANNING;
+using AI_YOUTUBER.Models;
 
 namespace AI_YOUTUBER.Functions.MEMORY;
 
@@ -14,7 +15,7 @@ public static class VideoMemory
     private const string OllamaUrl = "http://localhost:11434/api/generate";
     private const string SummaryModel = "qwen3:8b";
 
-    public static async Task SaveVideoSummaryAsync(
+    public static async Task<SavedVideoMemory> SaveVideoSummaryAsync(
         EpisodeStrategyPlan strategy,
         string script,
         int targetMinutes)
@@ -46,6 +47,8 @@ public static class VideoMemory
         await AppendToChannelBrainAsync(videoId, strategy, summary, targetMinutes);
 
         Console.WriteLine($"[VideoMemory] Saved video memory: {videoId}");
+
+        return new SavedVideoMemory(videoId, videoFolder);
     }
 
     private static async Task<string> CreateShortSummaryAsync(
