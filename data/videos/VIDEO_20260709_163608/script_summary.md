@@ -1,5 +1,0 @@
-SHORT_SUMMARY: EX_01 tests AI-generated video captions with a human twist, using cursed hardware to add personality and avoid robotic AI output. The video highlights the struggle of creating engaging captions on outdated tech while embracing imperfection.  
-WHAT_THIS_VIDEO_TESTED: AI caption personalization, the impact of cursed hardware on content authenticity, and the contrast between corporate AI and DIY AI content creation.  
-RETENTION_NOTES: Strong retention through humor, relatability, and the unique angle of cursed hardware. Risk of being too niche for some viewers.  
-DO_NOT_REPEAT_TOO_SOON: Cursed hardware angle, AI caption personalization, and direct comparisons to corporate AI.  
-NEXT_VIDEO_HINT: Explore a more structured AI caption testing method with measurable results, while still maintaining the DIY, hardware-affected style.
