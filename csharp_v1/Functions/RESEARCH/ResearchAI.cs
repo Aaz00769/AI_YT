@@ -10,10 +10,13 @@ public static class ResearchAI
         Timeout = TimeSpan.FromMinutes(30)
     };
 
-    private const string OllamaUrl = "http://localhost:11434/api/chat";
+    private static string OllamaUrl =>
+        $"{(Environment.GetEnvironmentVariable("EX01_OLLAMA_URL") ?? "http://localhost:11434").TrimEnd('/')}/api/chat";
 
-    private const string QueryModel = "qwen3:8b";
-    private const string SummaryModel = "qwen3:8b";
+    private static string QueryModel =>
+        Environment.GetEnvironmentVariable("EX01_RESEARCH_MODEL") ?? "qwen3:8b";
+    private static string SummaryModel =>
+        Environment.GetEnvironmentVariable("EX01_RESEARCH_MODEL") ?? "qwen3:8b";
 
     private const int ResultsPerQuery = 4;
     private const int MaxSources = 14;
@@ -419,6 +422,7 @@ public static class ResearchAI
         {
             model,
             stream = false,
+            think = false,
             options = new
             {
                 temperature,

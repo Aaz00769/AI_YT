@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -10,46 +9,25 @@ public sealed class VideoValidationService
 {
     public async Task<VideoValidationResult> ValidateAsync(VideoValidationRequest request)
     {
-        double minimumDuration = request.RequestedDurationSeconds * request.MinimumDurationRatio;
-        double maximumDuration = request.RequestedDurationSeconds * request.MaximumDurationRatio;
         VideoValidationResult result = new()
         {
             RequestedDurationSeconds = request.RequestedDurationSeconds,
-            MinimumAcceptedDurationSeconds = minimumDuration,
-            MaximumAcceptedDurationSeconds = maximumDuration,
+            MinimumAcceptedDurationSeconds = request.RequestedDurationSeconds * request.MinimumDurationRatio,
+            MaximumAcceptedDurationSeconds = request.RequestedDurationSeconds * request.MaximumDurationRatio,
             ScriptValidationPassed = request.ScriptValidation?.Success == true,
             VoiceDurationValidationPassed = request.VoiceDurationValidation?.Success == true,
             AudioDurationSeconds = request.VoiceDurationValidation?.ActualDurationSeconds ?? 0
         };
-        Console.WriteLine($"[VideoValidation] Validating: {request.VideoPath}");
 
         if (!result.ScriptValidationPassed)
-            result.Errors.Add("Successful Short script validation evidence is missing.");
+            result.Errors.Add("Successful script-validation evidence is missing.");
         else
-            result.ChecksPassed.Add("Short script validation passed.");
+            result.ChecksPassed.Add("Script validation passed.");
 
         if (!result.VoiceDurationValidationPassed)
             result.Errors.Add("Successful voice-duration validation evidence is missing.");
         else
-            result.ChecksPassed.Add("Voice duration validation passed.");
-
-        if (!File.Exists(request.VideoPath))
-        {
-            result.Errors.Add("Final video file does not exist.");
-            return Finish(result);
-        }
-
-        FileInfo file = new(request.VideoPath);
-        result.FileSizeBytes = file.Length;
-        if (file.Length < request.MinimumFileSizeBytes)
-        {
-            result.Errors.Add(
-                $"Video file is too small ({file.Length} bytes; minimum is {request.MinimumFileSizeBytes}).");
-        }
-        else
-        {
-            result.ChecksPassed.Add($"Video file size is {file.Length} bytes.");
-        }
+            result.ChecksPassed.Add("Voice-duration validation passed.");
 
         if (!File.Exists(request.ScriptPath) ||
             string.IsNullOrWhiteSpace(await File.ReadAllTextAsync(request.ScriptPath)))
@@ -57,182 +35,109 @@ public sealed class VideoValidationService
         else
             result.ChecksPassed.Add("Final script exists and is not empty.");
 
-        result.FileHash = await CalculateFileHashAsync(request.VideoPath);
-        if (request.CompletedVideoHashes.Contains(result.FileHash, StringComparer.OrdinalIgnoreCase))
-            result.Errors.Add("Video is byte-for-byte identical to another completed video in this batch.");
-        else
-            result.ChecksPassed.Add("Video hash is unique within the completed batch outputs.");
+        if (!File.Exists(request.VideoPath))
+        {
+            result.Errors.Add("Final video file does not exist.");
+            return result;
+        }
 
-        FfprobeResult probe;
+        FileInfo videoFile = new(request.VideoPath);
+        result.FileSizeBytes = videoFile.Length;
+        if (videoFile.Length < request.MinimumFileSizeBytes)
+            result.Errors.Add($"Video is too small ({videoFile.Length} bytes)." );
+        else
+            result.ChecksPassed.Add($"Video file size is {videoFile.Length} bytes.");
+
+        await using (FileStream stream = File.OpenRead(request.VideoPath))
+            result.FileHash = Convert.ToHexString(await SHA256.HashDataAsync(stream));
+
         try
         {
-            probe = await RunFfprobeAsync(request.VideoPath);
+            MediaProbe probe = await ProbeAsync(request.VideoPath);
+            result.FullValidationPerformed = true;
+            result.DurationSeconds = probe.DurationSeconds;
+            result.Width = probe.Width;
+            result.Height = probe.Height;
+            result.HasVideo = probe.HasVideo;
+            result.HasAudio = probe.HasAudio;
+            result.AudioVideoDurationDifferenceSeconds = Math.Abs(result.AudioDurationSeconds - probe.DurationSeconds);
+
+            if (probe.DurationSeconds < result.MinimumAcceptedDurationSeconds ||
+                probe.DurationSeconds > result.MaximumAcceptedDurationSeconds)
+                result.Errors.Add(
+                    $"Video duration {probe.DurationSeconds:F2}s is outside the accepted " +
+                    $"{result.MinimumAcceptedDurationSeconds:F2}–{result.MaximumAcceptedDurationSeconds:F2}s range.");
+            else
+                result.ChecksPassed.Add($"Duration {probe.DurationSeconds:F2}s matches the requested job.");
+
+            if (result.AudioDurationSeconds > 0 &&
+                result.AudioVideoDurationDifferenceSeconds > request.MaximumAudioVideoDifferenceSeconds)
+                result.Errors.Add(
+                    $"Audio/video durations differ by {result.AudioVideoDurationDifferenceSeconds:F2}s.");
+
+            if (!probe.HasVideo)
+                result.Errors.Add("Video stream is missing.");
+            if (!probe.HasAudio)
+                result.Errors.Add("Audio stream is missing.");
+
+            bool orientationMatches = request.Orientation == VideoOrientation.Portrait
+                ? probe.Height > probe.Width && probe.Height / (double)Math.Max(1, probe.Width) is >= 1.2 and <= 2.3
+                : probe.Width > probe.Height && probe.Width / (double)Math.Max(1, probe.Height) is >= 1.2 and <= 2.3;
+            if (!orientationMatches)
+                result.Errors.Add(
+                    $"Video dimensions {probe.Width}x{probe.Height} do not match {request.Orientation.ToString().ToLowerInvariant()} output.");
+            else
+                result.ChecksPassed.Add($"Video dimensions are {probe.Width}x{probe.Height}.");
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
             result.FullValidationPerformed = false;
-            string warning = $"ffprobe validation was unavailable: {ex.Message}";
-            result.Warnings.Add(warning);
-            Console.WriteLine($"[VideoValidation] {warning}");
-
-            if (request.AllowLimitedValidationWithoutFfprobe && result.Errors.Count == 0)
-            {
-                result.Success = true;
-                result.ChecksPassed.Add(
-                    "Limited validation accepted by configuration; media streams were not inspected.");
-            }
-            else
-            {
-                result.Errors.Add(
-                    "Full validation is required before official memory can be saved.");
-            }
-
-            return Finish(result);
+            result.Errors.Add($"Full ffprobe validation failed: {exception.Message}");
         }
 
-        result.FullValidationPerformed = true;
-        result.DurationSeconds = probe.DurationSeconds;
-        result.Width = probe.Width;
-        result.Height = probe.Height;
-        result.HasVideo = probe.HasVideo;
-        result.HasAudio = probe.HasAudio;
-        result.AudioVideoDurationDifferenceSeconds = Math.Abs(
-            result.AudioDurationSeconds - result.DurationSeconds);
-
-        if (probe.DurationSeconds <= 0)
-            result.Errors.Add("Video duration is zero or could not be read.");
-        else if (probe.DurationSeconds < minimumDuration || probe.DurationSeconds > maximumDuration)
-            result.Errors.Add(
-                $"Video duration {probe.DurationSeconds:F2}s is outside the accepted " +
-                $"{minimumDuration:F2}-{maximumDuration:F2}s range for the requested " +
-                $"{request.RequestedDurationSeconds:F2}s Short.");
-        else if (probe.DurationSeconds > request.AbsoluteMaximumDurationSeconds + 0.5)
-            result.Errors.Add(
-                $"Video duration {probe.DurationSeconds:F2}s exceeds the absolute " +
-                $"{request.AbsoluteMaximumDurationSeconds}s Short limit.");
-        else
-            result.ChecksPassed.Add(
-                $"Duration {probe.DurationSeconds:F2}s matches the requested generation job.");
-
-        if (result.AudioDurationSeconds > 0 &&
-            result.AudioVideoDurationDifferenceSeconds > request.MaximumAudioVideoDifferenceSeconds)
-        {
-            result.Errors.Add(
-                $"Audio/video duration difference is {result.AudioVideoDurationDifferenceSeconds:F2}s; " +
-                $"maximum is {request.MaximumAudioVideoDifferenceSeconds:F2}s.");
-        }
-        else if (result.AudioDurationSeconds > 0)
-        {
-            result.ChecksPassed.Add(
-                $"Audio/video durations differ by only " +
-                $"{result.AudioVideoDurationDifferenceSeconds:F2}s.");
-        }
-
-        if (!probe.HasVideo)
-            result.Errors.Add("Video does not contain a video stream.");
-        else
-            result.ChecksPassed.Add("Video contains a video stream.");
-
-        if (probe.Width <= 0 || probe.Height <= 0)
-        {
-            result.Errors.Add("Video width or height could not be read.");
-        }
-        else
-        {
-            double aspect = probe.Height / (double)probe.Width;
-            if (probe.Height <= probe.Width || aspect < 1.2 || aspect > 2.3)
-            {
-                result.Errors.Add(
-                    $"Video dimensions {probe.Width}x{probe.Height} are not an accepted vertical Short ratio.");
-            }
-            else
-            {
-                result.ChecksPassed.Add(
-                    $"Video dimensions are vertical at {probe.Width}x{probe.Height}.");
-            }
-        }
-
-        if (!probe.HasAudio)
-            result.Errors.Add("Video does not contain an audio stream.");
-        else
-            result.ChecksPassed.Add("Video contains an audio stream.");
-
-        result.Success = result.Errors.Count == 0;
-        return Finish(result);
-    }
-
-    private static VideoValidationResult Finish(VideoValidationResult result)
-    {
-        if (result.Success)
-        {
-            string mode = result.FullValidationPerformed ? "full" : "limited";
-            Console.WriteLine($"[VideoValidation] Video passed {mode} validation.");
-        }
-        else
-        {
-            Console.WriteLine("[VideoValidation] Video failed validation:");
-            foreach (string error in result.Errors)
-                Console.WriteLine($"[VideoValidation] - {error}");
-        }
-
+        result.Success = result.Errors.Count == 0 && result.FullValidationPerformed;
         return result;
     }
 
-    private static async Task<string> CalculateFileHashAsync(string path)
+    public static async Task<double> GetDurationAsync(string mediaPath)
     {
-        await using FileStream stream = File.OpenRead(path);
-        byte[] hash = await SHA256.HashDataAsync(stream);
-        return Convert.ToHexString(hash);
+        ProcessResult result = await ProcessRunner.RunAsync(
+            "ffprobe",
+            new[]
+            {
+                "-v", "error", "-show_entries", "format=duration",
+                "-of", "default=nw=1:nk=1", mediaPath
+            },
+            timeout: TimeSpan.FromSeconds(30));
+        if (result.ExitCode != 0 ||
+            !double.TryParse(result.StandardOutput.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out double duration))
+            throw new InvalidOperationException($"ffprobe could not read duration: {result.StandardError.Trim()}");
+        return duration;
     }
 
-    private static async Task<FfprobeResult> RunFfprobeAsync(string videoPath)
+    private static async Task<MediaProbe> ProbeAsync(string videoPath)
     {
-        ProcessStartInfo startInfo = new()
-        {
-            FileName = "ffprobe",
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true
-        };
-        startInfo.ArgumentList.Add("-v");
-        startInfo.ArgumentList.Add("error");
-        startInfo.ArgumentList.Add("-show_entries");
-        startInfo.ArgumentList.Add("format=duration:stream=codec_type,width,height");
-        startInfo.ArgumentList.Add("-of");
-        startInfo.ArgumentList.Add("json");
-        startInfo.ArgumentList.Add(videoPath);
+        ProcessResult result = await ProcessRunner.RunAsync(
+            "ffprobe",
+            new[]
+            {
+                "-v", "error", "-show_entries", "format=duration:stream=codec_type,width,height",
+                "-of", "json", videoPath
+            },
+            timeout: TimeSpan.FromSeconds(30));
+        if (result.ExitCode != 0)
+            throw new InvalidOperationException(result.StandardError.Trim());
 
-        using Process process = Process.Start(startInfo)
-            ?? throw new InvalidOperationException("Could not start ffprobe.");
-        Task<string> stdoutTask = process.StandardOutput.ReadToEndAsync();
-        Task<string> stderrTask = process.StandardError.ReadToEndAsync();
-
-        using CancellationTokenSource timeout = new(TimeSpan.FromSeconds(30));
-        try
-        {
-            await process.WaitForExitAsync(timeout.Token);
-        }
-        catch (OperationCanceledException)
-        {
-            process.Kill(entireProcessTree: true);
-            throw new TimeoutException("ffprobe did not finish within 30 seconds.");
-        }
-
-        string stdout = await stdoutTask;
-        string stderr = await stderrTask;
-        if (process.ExitCode != 0)
-            throw new InvalidOperationException($"ffprobe failed: {stderr.Trim()}");
-
-        using JsonDocument document = JsonDocument.Parse(stdout);
+        using JsonDocument document = JsonDocument.Parse(result.StandardOutput);
         JsonElement root = document.RootElement;
         double duration = 0;
         if (root.TryGetProperty("format", out JsonElement format) &&
             format.TryGetProperty("duration", out JsonElement durationElement))
         {
-            string rawDuration = durationElement.ValueKind == JsonValueKind.String
+            string raw = durationElement.ValueKind == JsonValueKind.String
                 ? durationElement.GetString() ?? ""
                 : durationElement.GetRawText();
-            double.TryParse(rawDuration, NumberStyles.Float, CultureInfo.InvariantCulture, out duration);
+            double.TryParse(raw, NumberStyles.Float, CultureInfo.InvariantCulture, out duration);
         }
 
         int width = 0;
@@ -243,32 +148,21 @@ public sealed class VideoValidationService
         {
             foreach (JsonElement stream in streams.EnumerateArray())
             {
-                string codecType = stream.TryGetProperty("codec_type", out JsonElement codecTypeElement)
-                    ? codecTypeElement.GetString() ?? ""
+                string type = stream.TryGetProperty("codec_type", out JsonElement value)
+                    ? value.GetString() ?? ""
                     : "";
-                if (codecType.Equals("audio", StringComparison.OrdinalIgnoreCase))
+                if (type == "audio")
                     hasAudio = true;
-                if (!codecType.Equals("video", StringComparison.OrdinalIgnoreCase))
+                if (type != "video")
                     continue;
-
                 hasVideo = true;
-
-                width = stream.TryGetProperty("width", out JsonElement widthElement)
-                    ? widthElement.GetInt32()
-                    : 0;
-                height = stream.TryGetProperty("height", out JsonElement heightElement)
-                    ? heightElement.GetInt32()
-                    : 0;
+                width = stream.TryGetProperty("width", out JsonElement widthValue) ? widthValue.GetInt32() : 0;
+                height = stream.TryGetProperty("height", out JsonElement heightValue) ? heightValue.GetInt32() : 0;
             }
         }
 
-        return new FfprobeResult(duration, width, height, hasVideo, hasAudio);
+        return new MediaProbe(duration, width, height, hasVideo, hasAudio);
     }
 
-    private sealed record FfprobeResult(
-        double DurationSeconds,
-        int Width,
-        int Height,
-        bool HasVideo,
-        bool HasAudio);
+    private sealed record MediaProbe(double DurationSeconds, int Width, int Height, bool HasVideo, bool HasAudio);
 }

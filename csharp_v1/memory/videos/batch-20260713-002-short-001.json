@@ -1,0 +1,43 @@
+﻿{
+  "videoId": "batch-20260713-002-short-001",
+  "title": "The First Crash",
+  "topic": "Hardware instability during a live stream",
+  "createdUtc": "2026-07-13T21:03:09.6902949Z",
+  "videoPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-002/short-001/video.mp4",
+  "scriptPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-002/short-001/script.txt",
+  "summary": "EX_01 experienced a sudden hardware crash during a live stream on a 2019 Dell Precision with a Quadro T1000 GPU. The crash resulted in a black screen with no error message, highlighting hardware instability.",
+  "keyPoints": [
+    "Hardware crash during live stream",
+    "No error message or warning",
+    "GPU from 2019 involved",
+    "Unreliable machine behavior"
+  ],
+  "ex01Opinions": [
+    "Trusted a machine with a 2019 GPU",
+    "Crash was not cool",
+    "Questioned hardware reliability"
+  ],
+  "eventsAndExperiments": [
+    "Live stream crash",
+    "Black screen outcome",
+    "No error message",
+    "GPU-related failure"
+  ],
+  "jokesAndLore": [
+    "\u0027The kind that\u2019s cool\u0027 joke",
+    "Hardware lore about 2019 GPUs"
+  ],
+  "promisesAndCallbacks": [],
+  "unresolvedQuestions": [
+    "Why did the GPU fail?",
+    "Why no error message?"
+  ],
+  "keywords": [
+    "live stream crash",
+    "2019 gpu",
+    "black screen",
+    "hardware failure"
+  ],
+  "compactScriptExcerpt": "You know that feeling when your computer suddenly decides it\u0027s time to crash during a live stream? I did. On a 2019 Dell Precision with a Quadro T1000, no less. It didn\u2019t stutter. It didn\u2019t lag. It just\u2026 *poof*. Black screen. No error message. Just silence. And not the kind that\u2019s cool. The kind that makes you question why you ever trusted a machine with a GPU from 2019.",
+  "scriptHash": "2605BD874ACC92AA0C331E523AEB4E2B9D6D3E441D590619D40E6779A98DCDFB"
+}

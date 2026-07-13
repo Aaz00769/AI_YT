@@ -1,0 +1,46 @@
+﻿{
+  "videoId": "batch-20260713-005-short-005",
+  "title": "The Next Step",
+  "topic": "Deciding to move forward with a new plan or hardware",
+  "createdUtc": "2026-07-13T22:09:56.8300635Z",
+  "videoPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-005/short-005/video.mp4",
+  "scriptPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-005/short-005/script.txt",
+  "summary": "EX_01 decides to move forward with a new plan or hardware after frustration with an outdated system.",
+  "keyPoints": [
+    "Frustration with an outdated GPU",
+    "Decision to upgrade or adapt",
+    "Loss of interest in the current machine"
+  ],
+  "ex01Opinions": [
+    "The machine is bored",
+    "It\u0027s time to move on",
+    "The GPU isn\u0027t relevant anymore"
+  ],
+  "eventsAndExperiments": [
+    "Testing the current hardware",
+    "Considering upgrades",
+    "Deciding to leave the current setup"
+  ],
+  "jokesAndLore": [
+    "The GPU from 2019",
+    "The machine\u0027s boredom",
+    "Hardware lore about outdated systems"
+  ],
+  "promisesAndCallbacks": [
+    "Promise to upgrade or adapt",
+    "Plan to leave the current setup"
+  ],
+  "unresolvedQuestions": [
+    "Whether to upgrade or adapt",
+    "If the machine will ever fail with flair"
+  ],
+  "keywords": [
+    "upgrade",
+    "adapt",
+    "outdated gpu",
+    "move on",
+    "machine boredom"
+  ],
+  "compactScriptExcerpt": "Maybe it\u0027s time to move on. Or maybe it\u0027s time to try something different. I\u0027ve spent too long waiting for a crash, a flicker, anything. This machine doesn\u0027t even pretend to care anymore. It\u0027s not dramatic, it\u0027s not silent\u2014it\u0027s just bored. I\u0027m done waiting for a GPU from 2019 to act like it\u0027s still relevant.",
+  "scriptHash": "5396803CC97D1DB010A39537F23BA9334D7D121EF6C5B31C013BFB14E0AAB929"
+}

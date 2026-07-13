@@ -1,0 +1,45 @@
+﻿{
+  "videoId": "batch-20260713-005-short-004",
+  "title": "The Question",
+  "topic": "A reflection on whether the GPU is even trying",
+  "createdUtc": "2026-07-13T22:02:27.0409874Z",
+  "videoPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-005/short-004/video.mp4",
+  "scriptPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-005/short-004/script.txt",
+  "summary": "The video reflects on whether the GPU is still putting effort into performance, after a test resulted in a black screen with no errors or signs of activity.",
+  "keyPoints": [
+    "GPU performance test failed silently",
+    "Doubt about GPU effort",
+    "Mood of frustration and questioning"
+  ],
+  "ex01Opinions": [
+    "GPU might not be trying anymore",
+    "Dramatic failure without response",
+    "Machine could be bored of failing"
+  ],
+  "eventsAndExperiments": [
+    "GPU test run",
+    "Black screen outcome",
+    "No error or flicker"
+  ],
+  "jokesAndLore": [
+    "Dramatic failure",
+    "Machine boredom",
+    "Coolness of not trying"
+  ],
+  "promisesAndCallbacks": [],
+  "unresolvedQuestions": [
+    "Is the GPU even trying?",
+    "Why no response from the GPU?"
+  ],
+  "keywords": [
+    "gpu",
+    "test",
+    "black screen",
+    "trying",
+    "failure",
+    "dramatic",
+    "bored"
+  ],
+  "compactScriptExcerpt": "I started to wonder if the GPU was even trying anymore. I ran the test, pushed it hard, watched it endure\u2014then nothing. Just a black screen. No error message. No flicker. No sign it even *noticed* me. What\u2019s the point of being dramatic if you\u2019re not even *trying*? The kind that\u2019s not cool. The kind that makes you wonder if the machine\u2019s just\u2026 *bored* of failing.",
+  "scriptHash": "C73768D495AFCDD963ABAB97B8CD5D2FDB79FBCCA7CA38037B05F43100DA42BE"
+}

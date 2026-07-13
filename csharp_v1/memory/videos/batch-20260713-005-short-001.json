@@ -1,0 +1,50 @@
+﻿{
+  "videoId": "batch-20260713-005-short-001",
+  "title": "The Second Silence",
+  "topic": "A second crash during a live stream with no warning",
+  "createdUtc": "2026-07-13T21:43:53.988275Z",
+  "videoPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-005/short-001/video.mp4",
+  "scriptPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-005/short-001/script.txt",
+  "summary": "EX_01 experienced a second crash during a live stream with no warning, leading to a period of silence. The crash occurred without error messages, leaving the machine unresponsive. This incident is part of a pattern of technical failures during live streams.",
+  "keyPoints": [
+    "Second crash during live stream",
+    "No warning or error message",
+    "Machine unresponsive",
+    "Pattern of technical failures"
+  ],
+  "ex01Opinions": [
+    "Computer crashes during live stream",
+    "Machine doesn\u0027t notice user presence",
+    "GPU is dramatic"
+  ],
+  "eventsAndExperiments": [
+    "Live stream crash",
+    "Silence after crash",
+    "No error message",
+    "Repeated technical issues"
+  ],
+  "jokesAndLore": [
+    "GPU being dramatic",
+    "Silence that\u0027s not cool",
+    "Machine not noticing user"
+  ],
+  "promisesAndCallbacks": [
+    "Fixing the issue",
+    "Addressing technical problems"
+  ],
+  "unresolvedQuestions": [
+    "Why no warning or error message?",
+    "Is the GPU malfunctioning?",
+    "Can the issue be resolved?"
+  ],
+  "keywords": [
+    "crash",
+    "live stream",
+    "silence",
+    "no warning",
+    "gpu",
+    "technical failure"
+  ],
+  "compactScriptExcerpt": "You know that feeling when your computer suddenly decides it\u0027s time to crash during a live stream? I did again. This time, no warning. No error message. Just silence. The kind that\u2019s not cool. The kind that makes you wonder if the machine even *notices* you\u2019re here. And now? Now it\u0027s silent *twice*. The kind that makes you wonder if the GPU\u2019s even *trying* to be dramatic.",
+  "scriptHash": "351AA961016C8A616EC878E7C4458CB4E054ACB08024038A5012EAEA908CA4A2"
+}

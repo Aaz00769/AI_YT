@@ -10,7 +10,7 @@ public static class ShortScriptValidator
         RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
     private static readonly Regex ThinkingOrFormattingPattern = new(
-        @"<\s*/?\s*think\b|```|^\s*#{1,6}\s|^\s*[-*]\s+",
+        @"<\s*/?\s*think\b|/no_think\b|```|\*\*|__|^\s*#{1,6}\s|^\s*[-*>]\s+",
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
     private static readonly Regex ModelCommentaryPattern = new(
@@ -37,30 +37,31 @@ public static class ShortScriptValidator
         @"\b(?:and|or|but|because|so|with|without|to|from|on|at|for|the|a|an|this|that|my|your|our)\s*$",
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
-    public static (int MinimumWords, int MaximumWords) GetWordRange(
-        int targetSeconds,
-        int minimumWordTolerance = 0,
-        int maximumWordTolerance = 0)
+    public static (int MinimumWords, int MaximumWords) GetShortWordRange(int targetSeconds)
     {
         targetSeconds = Math.Clamp(targetSeconds, 15, 60);
-        int requestedMinimum = (int)Math.Ceiling(targetSeconds * 2.2);
-        int requestedMaximum = (int)Math.Floor(targetSeconds * 2.7);
         return (
-            Math.Max(1, requestedMinimum - Math.Max(0, minimumWordTolerance)),
-            requestedMaximum + Math.Max(0, maximumWordTolerance));
+            (int)Math.Ceiling(targetSeconds * 2.2),
+            (int)Math.Floor(targetSeconds * 2.7));
+    }
+
+    public static (int MinimumWords, int MaximumWords) GetLongFormWordRange(int targetMinutes)
+    {
+        targetMinutes = Math.Clamp(targetMinutes, 1, 30);
+        return (targetMinutes * 140, targetMinutes * 170);
     }
 
     public static int CountSpokenWords(string? script) =>
         string.IsNullOrWhiteSpace(script) ? 0 : SpokenWordPattern.Matches(script).Count;
 
-    public static ShortScriptValidationResult Validate(
+    public static ScriptValidationResult Validate(
         string? script,
         int minimumWords,
         int maximumWords,
         OllamaGenerationResult? generation = null)
     {
         string value = script?.Trim() ?? "";
-        ShortScriptValidationResult result = new()
+        ScriptValidationResult result = new()
         {
             MinimumWords = minimumWords,
             MaximumWords = maximumWords,
@@ -72,15 +73,9 @@ public static class ShortScriptValidator
             result.Errors.Add("Script is empty.");
 
         if (result.WordCount < minimumWords)
-        {
-            result.Errors.Add(
-                $"Script is too short: {result.WordCount} spoken words; minimum is {minimumWords}.");
-        }
+            result.Errors.Add($"Script is too short: {result.WordCount} spoken words; minimum is {minimumWords}.");
         else if (result.WordCount > maximumWords)
-        {
-            result.Errors.Add(
-                $"Script is too long: {result.WordCount} spoken words; maximum is {maximumWords}.");
-        }
+            result.Errors.Add($"Script is too long: {result.WordCount} spoken words; maximum is {maximumWords}.");
 
         if (generation is not null && !generation.Completed)
         {
@@ -109,11 +104,8 @@ public static class ShortScriptValidator
                 result.Errors.Add("Script ends with dangling punctuation or an unfinished delimiter.");
             }
 
-            string withoutClosingPunctuation = Regex.Replace(
-                value,
-                "[.!?…\\\"'”’\\)\\]]+$",
-                "").TrimEnd();
-            if (FragmentEndingPattern.IsMatch(withoutClosingPunctuation))
+            string ending = Regex.Replace(value, "[.!?…\\\"'”’\\)\\]]+$", "").TrimEnd();
+            if (FragmentEndingPattern.IsMatch(ending))
             {
                 result.AppearsTruncated = true;
                 result.Errors.Add("Script appears to end on an incomplete sentence fragment.");
@@ -133,61 +125,32 @@ public static class ShortScriptValidator
                 result.Errors.Add("Script contains prompt instructions, labels, or model commentary.");
             if (PlaceholderPattern.IsMatch(value))
                 result.Errors.Add("Script contains placeholder text.");
-
-            if (!Regex.IsMatch(value, @"[\p{L}]", RegexOptions.CultureInvariant) ||
-                result.WordCount < 3)
-            {
+            if (!Regex.IsMatch(value, @"[\p{L}]", RegexOptions.CultureInvariant) || result.WordCount < 3)
                 result.Errors.Add("Script is not complete, speakable prose.");
-            }
         }
 
         result.Success = result.Errors.Count == 0;
-        Log(result);
         return result;
     }
 
-    public static string DescribeFailure(ShortScriptValidationResult validation)
-    {
-        string errors = validation.Errors.Count == 0
-            ? "unknown script-validation failure"
-            : string.Join(" ", validation.Errors);
-        return $"{validation.WordCount} words. {errors}";
-    }
+    public static string Describe(ScriptValidationResult result) =>
+        result.Success
+            ? $"passed ({result.WordCount} words; target {result.MinimumWords}–{result.MaximumWords})"
+            : $"failed ({string.Join(" ", result.Errors)})";
 
     private static bool HasUnbalancedBrackets(string value)
     {
-        Dictionary<char, char> pairs = new()
-        {
-            [')'] = '(',
-            [']'] = '[',
-            ['}'] = '{'
-        };
+        Dictionary<char, char> pairs = new() { [')'] = '(', [']'] = '[', ['}'] = '{' };
         Stack<char> openings = new();
         foreach (char character in value)
         {
             if (character is '(' or '[' or '{')
-            {
                 openings.Push(character);
-            }
-            else if (pairs.TryGetValue(character, out char expectedOpening))
-            {
-                if (openings.Count == 0 || openings.Pop() != expectedOpening)
-                    return true;
-            }
+            else if (pairs.TryGetValue(character, out char opening) &&
+                     (openings.Count == 0 || openings.Pop() != opening))
+                return true;
         }
 
         return openings.Count != 0;
-    }
-
-    private static void Log(ShortScriptValidationResult result)
-    {
-        Console.WriteLine(
-            $"[ScriptValidation] {(result.Success ? "Passed" : "Failed")}: " +
-            $"{result.WordCount} words (accepted {result.MinimumWords}-{result.MaximumWords}), " +
-            $"truncated={result.AppearsTruncated}, tokenLimit={result.ReachedOutputTokenLimit}.");
-        foreach (string warning in result.Warnings)
-            Console.WriteLine($"[ScriptValidation] Warning: {warning}");
-        foreach (string error in result.Errors)
-            Console.WriteLine($"[ScriptValidation] Error: {error}");
     }
 }

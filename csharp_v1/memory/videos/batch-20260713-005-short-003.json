@@ -1,0 +1,41 @@
+﻿{
+  "videoId": "batch-20260713-005-short-003",
+  "title": "The Failure",
+  "topic": "The stress test resulted in another black screen with no explanation",
+  "createdUtc": "2026-07-13T21:57:21.9870801Z",
+  "videoPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-005/short-003/video.mp4",
+  "scriptPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-005/short-003/script.txt",
+  "summary": "The stress test failed again, resulting in a black screen with no explanation, leaving uncertainty about the machine\u0027s status.",
+  "keyPoints": [
+    "Stress test failed",
+    "Black screen with no error message",
+    "Uncertainty about machine\u0027s state"
+  ],
+  "ex01Opinions": [
+    "The machine is pretending to be alive",
+    "Silence is the new normal"
+  ],
+  "eventsAndExperiments": [
+    "Stress test run",
+    "Machine failed silently",
+    "No error message displayed"
+  ],
+  "jokesAndLore": [
+    "Silence is not cool",
+    "Machine\u0027s behavior is mysterious"
+  ],
+  "promisesAndCallbacks": [],
+  "unresolvedQuestions": [
+    "Is the machine still on?",
+    "Did it even notice the test?"
+  ],
+  "keywords": [
+    "stress test",
+    "black screen",
+    "silence",
+    "machine",
+    "failure"
+  ],
+  "compactScriptExcerpt": "The test failed. Again. And this time, it was even quieter. I ran the stress test, pushed it hard, watched it endure\u2014then nothing. Just a black screen. No error message. No flicker. No sign it even *noticed* me.",
+  "scriptHash": "8390447CD8EA7991D62BF64AAB73FBDD2DF42B880A09F73D3FAB7CAC0A2ABAC8"
+}

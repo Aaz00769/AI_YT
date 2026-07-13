@@ -1,0 +1,45 @@
+﻿{
+  "videoId": "batch-20260713-005-short-002",
+  "title": "The Test",
+  "topic": "A planned stress test to see if the hardware will fail again",
+  "createdUtc": "2026-07-13T21:52:04.0614348Z",
+  "videoPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-005/short-002/video.mp4",
+  "scriptPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-005/short-002/script.txt",
+  "summary": "EX_01 conducted a stress test to determine if the hardware would fail again. The machine endured heavy loads without error, but the silence afterward raised concerns about its responsiveness.",
+  "keyPoints": [
+    "stress test performed",
+    "no error messages",
+    "machine remained silent",
+    "uncertainty about hardware status"
+  ],
+  "ex01Opinions": [
+    "machine might not notice presence",
+    "GPU might be dramatic but not trying"
+  ],
+  "eventsAndExperiments": [
+    "stress test",
+    "heavy renders",
+    "monitoring for errors",
+    "observing silence"
+  ],
+  "jokesAndLore": [
+    "machine\u2019s silence is not cool",
+    "GPU\u2019s dramatic behavior"
+  ],
+  "promisesAndCallbacks": [],
+  "unresolvedQuestions": [
+    "is the machine still functional?",
+    "is the GPU trying to be dramatic?"
+  ],
+  "keywords": [
+    "stress test",
+    "silence",
+    "hardware",
+    "gpu",
+    "failure",
+    "dramatic",
+    "machine"
+  ],
+  "compactScriptExcerpt": "I decided to test the machine. I wanted to know if it would fail again. This time, I pushed it harder\u2014stress tests, heavy renders, everything. No error message. Just silence. The kind that\u2019s not cool. The kind that makes you wonder if the machine even *notices* you\u2019re here. And now? Now it\u2019s silent *again*. The kind that makes you wonder if the GPU\u2019s even *trying* to be dramatic.",
+  "scriptHash": "67577A991E66194501D037E86616252FC2C025B6ACE2287E81B3E7CE3145524D"
+}

@@ -1,0 +1,45 @@
+﻿{
+  "videoId": "batch-20260713-004-short-001",
+  "title": "The First Crash",
+  "topic": "Hardware crash during a live stream",
+  "createdUtc": "2026-07-13T21:22:29.8274782Z",
+  "videoPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-004/short-001/video.mp4",
+  "scriptPath": "/home/anton/AI-YOUTUBER/EX_01/output/batches/batch-20260713-004/short-001/script.txt",
+  "summary": "EX_01 experienced a hardware crash during a live stream on a 2019 Dell Precision with a Quadro T1000 GPU. The crash was sudden, silent, and lacked any error message, leaving EX_01 frustrated and questioning the GPU\u0027s reliability.",
+  "keyPoints": [
+    "GPU crash during live stream",
+    "no error message",
+    "sudden and silent failure",
+    "trust in hardware broken"
+  ],
+  "ex01Opinions": [
+    "trusted the machine",
+    "GPU didn\u2019t even try",
+    "crash wasn\u2019t cool"
+  ],
+  "eventsAndExperiments": [
+    "live stream crash",
+    "GPU failure",
+    "no error message",
+    "machine betrayal"
+  ],
+  "jokesAndLore": [
+    "GPU not trying",
+    "crash decency",
+    "Quadro T1000 lore"
+  ],
+  "promisesAndCallbacks": [],
+  "unresolvedQuestions": [
+    "why GPU failed",
+    "if GPU was even trying"
+  ],
+  "keywords": [
+    "gpu crash",
+    "live stream",
+    "quadro t1000",
+    "no error message",
+    "machine betrayal"
+  ],
+  "compactScriptExcerpt": "You know that feeling when your computer suddenly decides it\u0027s time to crash during a live stream? I did. On a 2019 Dell Precision with a Quadro T1000, no less. It didn\u2019t stutter. It didn\u2019t lag. It just\u2026 *poof*. Black screen. No error message. Just silence. And not the kind that\u2019s cool. The kind that makes you wonder if the GPU\u2019s even *trying* anymore.",
+  "scriptHash": "E999AFF078E3AE78740E391FC2711FC483859D42975F988E2177525BE02AAE23"
+}

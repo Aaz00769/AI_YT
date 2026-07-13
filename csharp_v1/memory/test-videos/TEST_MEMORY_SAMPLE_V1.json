@@ -1,0 +1,59 @@
+﻿{
+  "videoId": "TEST_MEMORY_SAMPLE_V1",
+  "title": "EX_01 memory continuity test",
+  "topic": "local AI rendering and cursed laptop cooling",
+  "createdUtc": "2026-07-13T19:49:57.8479522Z",
+  "videoPath": "/tmp/ex01-memory-test-output.mp4",
+  "scriptPath": "/tmp/ex01-memory-test-b2b1233a8f924b959b759129253cbcc7.txt",
+  "summary": "In this test video, I tried to render a tiny local AI experiment on the cursed Dell Precision. The Quadro T1000 survived, which I previously considered a rumor rather than a fact. I think small local models are more interesting when they admit their hardware limits.",
+  "keyPoints": [
+    "In this test video, I tried to render a tiny local AI experiment on the cursed Dell Precision.",
+    "The Quadro T1000 survived, which I previously considered a rumor rather than a fact.",
+    "I think small local models are more interesting when they admit their hardware limits.",
+    "Anton promised that next time we will test whether the cooling fan can finish a video without negotiating overtime.",
+    "Will the next render complete before the laptop becomes a portable radiator?"
+  ],
+  "ex01Opinions": [
+    "I think small local models are more interesting when they admit their hardware limits."
+  ],
+  "eventsAndExperiments": [
+    "In this test video, I tried to render a tiny local AI experiment on the cursed Dell Precision."
+  ],
+  "jokesAndLore": [
+    "In this test video, I tried to render a tiny local AI experiment on the cursed Dell Precision.",
+    "The Quadro T1000 survived, which I previously considered a rumor rather than a fact.",
+    "I think small local models are more interesting when they admit their hardware limits.",
+    "Anton promised that next time we will test whether the cooling fan can finish a video without negotiating overtime.",
+    "Will the next render complete before the laptop becomes a portable radiator?"
+  ],
+  "promisesAndCallbacks": [
+    "Anton promised that next time we will test whether the cooling fan can finish a video without negotiating overtime."
+  ],
+  "unresolvedQuestions": [
+    "Will the next render complete before the laptop becomes a portable radiator?"
+  ],
+  "keywords": [
+    "local",
+    "next",
+    "render",
+    "test",
+    "video",
+    "admit",
+    "anton",
+    "becomes",
+    "complete",
+    "considered",
+    "cooling",
+    "cursed",
+    "dell",
+    "experiment",
+    "fact",
+    "fan",
+    "finish",
+    "hardware",
+    "interesting",
+    "laptop"
+  ],
+  "compactScriptExcerpt": "In this test video, I tried to render a tiny local AI experiment on the cursed Dell Precision. The Quadro T1000 survived, which I previously considered a rumor rather than a fact. I think small local models are more interesting when they admit their hardware limits. Anton promised that next time we will test whether the cooling fan can finish a video without negotiating overtime. Will the next render complete before the laptop becomes a portable radiator?",
+  "scriptHash": "7A973202DCDD4072B9B71729A8F33EAF69BF76BFA02AD1D9AFCA329F933B5F58"
+}
