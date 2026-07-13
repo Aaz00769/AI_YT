@@ -1,0 +1,268 @@
+[
+  {
+    "BeatType": "QuickPunchIn",
+    "StartTime": 0.015,
+    "EndTime": 0.765,
+    "Intensity": 0.5984,
+    "Reason": "Excited: Hey there, fellow victims of hardware purgatory! Welcome"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 0.765,
+    "EndTime": 1.045,
+    "Intensity": 0.2992,
+    "Reason": "Return after QuickPunchIn"
+  },
+  {
+    "BeatType": "QuickPunchIn",
+    "StartTime": 5.583120190545589,
+    "EndTime": 6.333120190545589,
+    "Intensity": 0.5984,
+    "Reason": "Excited: Still Thinks \u201CAI\u201D Is a Typo for \u2018I\u2019m"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 6.333120190545589,
+    "EndTime": 6.613120190545589,
+    "Intensity": 0.2992,
+    "Reason": "Return after QuickPunchIn"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 13.395439721509685,
+    "EndTime": 16.595439721509685,
+    "Intensity": 0.35,
+    "Reason": "Neutral: so ancient, it probably believes \u201CAI\u201D is a"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 16.595439721509685,
+    "EndTime": 16.875439721509686,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 22.21911506046167,
+    "EndTime": 25.41911506046167,
+    "Intensity": 0.35,
+    "Reason": "Neutral: write a novel with a pen made of"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 25.41911506046167,
+    "EndTime": 25.699115060461672,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "QuickPunchIn",
+    "StartTime": 29.504677537559473,
+    "EndTime": 30.254677537559473,
+    "Intensity": 0.6256,
+    "Reason": "Angry: AI script generators are all the rage now,"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 30.254677537559473,
+    "EndTime": 30.534677537559475,
+    "Intensity": 0.3128,
+    "Reason": "Return after QuickPunchIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 35.47805606449238,
+    "EndTime": 38.67805606449238,
+    "Intensity": 0.35,
+    "Reason": "Neutral: \u201Crevolutionize content creation\u201D while secretly just being fancy"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 38.67805606449238,
+    "EndTime": 38.95805606449238,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 41.499334921216416,
+    "EndTime": 44.69933492121642,
+    "Intensity": 0.35,
+    "Reason": "Neutral: is so tight, we\u2019re using a Quadro T1000"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 44.69933492121642,
+    "EndTime": 44.97933492121642,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SmallShake",
+    "StartTime": 47.37273176987888,
+    "EndTime": 48.02273176987888,
+    "Intensity": 0.68,
+    "Reason": "Panicked: ability to comprehend sarcasm. Trying to run a"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 48.02273176987888,
+    "EndTime": 48.30273176987888,
+    "Intensity": 0.34,
+    "Reason": "Return after SmallShake"
+  },
+  {
+    "BeatType": "Glitch",
+    "StartTime": 55.06527849028923,
+    "EndTime": 55.36527849028923,
+    "Intensity": 0.68,
+    "Reason": "Panicked: modern tool, as if it\u2019s saying, \u201CYou want"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 55.36527849028923,
+    "EndTime": 55.64527849028923,
+    "Intensity": 0.34,
+    "Reason": "Return after Glitch"
+  },
+  {
+    "BeatType": "BackgroundDim",
+    "StartTime": 63.511581165261674,
+    "EndTime": 66.51158116526167,
+    "Intensity": 0.44200000000000006,
+    "Reason": "Sad: a puddle of regret and thermal paste.\u201D And"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 66.51158116526167,
+    "EndTime": 66.79158116526168,
+    "Intensity": 0.22100000000000003,
+    "Reason": "Return after BackgroundDim"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 69.07554232319494,
+    "EndTime": 72.27554232319494,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: a hardware struggle it\u2019s a cursed one. My"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 72.27554232319494,
+    "EndTime": 72.55554232319494,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 76.77978197141766,
+    "EndTime": 79.97978197141767,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: it \u2018thermal abuse experimentation\u2019?\u201D My CPU? An Intel"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 79.97978197141767,
+    "EndTime": 80.25978197141767,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 84.54950714547404,
+    "EndTime": 87.74950714547404,
+    "Intensity": 0.44200000000000006,
+    "Reason": "Sad: My RAM? 32 GB, but half of it\u2019s"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 87.74950714547404,
+    "EndTime": 88.02950714547404,
+    "Intensity": 0.22100000000000003,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "QuickPunchIn",
+    "StartTime": 92.75903810919695,
+    "EndTime": 93.50903810919695,
+    "Intensity": 0.5984,
+    "Reason": "Excited: hey, I\u2019m not one to back down from"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 93.50903810919695,
+    "EndTime": 93.78903810919695,
+    "Intensity": 0.2992,
+    "Reason": "Return after QuickPunchIn"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 98.44790216196348,
+    "EndTime": 101.64790216196349,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: because structured planning is the only thing this"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 101.64790216196349,
+    "EndTime": 101.92790216196349,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 104.88692378160445,
+    "EndTime": 108.08692378160445,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: the AI ever actually works? Well\u2026 let\u2019s just"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 108.08692378160445,
+    "EndTime": 108.36692378160446,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 112.24363319897363,
+    "EndTime": 115.44363319897363,
+    "Intensity": 0.35,
+    "Reason": "Neutral: So there you have it. Another day in"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 115.44363319897363,
+    "EndTime": 115.72363319897363,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 120.08843715646735,
+    "EndTime": 123.28843715646735,
+    "Intensity": 0.35,
+    "Reason": "Neutral: specs. Stay tuned and if you\u2019re feeling generous,"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 123.28843715646735,
+    "EndTime": 123.56843715646735,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 125.68352693294236,
+    "EndTime": 128.88352693294235,
+    "Intensity": 0.35,
+    "Reason": "Neutral: next AI project. Thanks, and remember: never trust"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 128.88352693294235,
+    "EndTime": 129.16352693294235,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomIn"
+  }
+]

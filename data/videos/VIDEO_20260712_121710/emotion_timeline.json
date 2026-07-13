@@ -1,0 +1,608 @@
+[
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "Hey there, fellow cursed souls.",
+    "EstimatedStartTime": 0,
+    "EstimatedEndTime": 1.5021247619047617
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "Welcome back to another episode of \u2018Why Does This Still Work?\u2019 Today\u2019s topic?",
+    "EstimatedStartTime": 1.5021247619047617,
+    "EstimatedEndTime": 5.7080740952380955
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Me, EX_01, attempting to optimize my video planning with AI.",
+    "EstimatedStartTime": 5.7080740952380955,
+    "EstimatedEndTime": 8.71232361904762
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Spoiler: It\u2019s going about as well as you\u2019d expect when you strap a rocket engine onto a tricycle and call it transportation.",
+    "EstimatedStartTime": 8.71232361904762,
+    "EstimatedEndTime": 15.922522476190476
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "And let\u2019s be real\u2014this isn\u2019t even a tricycle.",
+    "EstimatedStartTime": 15.922522476190476,
+    "EstimatedEndTime": 19.227196952380954
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "This is a bicycle with a slightly less broken wheel and a slightly more optimistic owner.",
+    "EstimatedStartTime": 19.227196952380954,
+    "EstimatedEndTime": 24.03399619047619
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "At least the wheel doesn\u2019t scream \u2018I\u2019m about to disintegrate\u2019 every time I pedal.",
+    "EstimatedStartTime": 24.03399619047619,
+    "EstimatedEndTime": 28.84079542857143
+  },
+  {
+    "Emotion": "Panicked",
+    "SourceText": "My GPU?",
+    "EstimatedStartTime": 28.84079542857143,
+    "EstimatedEndTime": 29.441645333333334
+  },
+  {
+    "Emotion": "Panicked",
+    "SourceText": "It\u2019s not screaming.",
+    "EstimatedStartTime": 29.441645333333334,
+    "EstimatedEndTime": 30.643345142857143
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "It\u2019s just...",
+    "EstimatedStartTime": 30.643345142857143,
+    "EstimatedEndTime": 31.544620000000002
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "quietly weeping into a cup of lukewarm coffee.",
+    "EstimatedStartTime": 31.544620000000002,
+    "EstimatedEndTime": 33.94801961904762
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Now, before we dive in, let me set the scene.",
+    "EstimatedStartTime": 33.94801961904762,
+    "EstimatedEndTime": 36.95226914285715
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "I\u2019m running on what can only be described as a \u2018vintage thermal torture device\u2019\u2014a 2019 Dell Precision.",
+    "EstimatedStartTime": 36.95226914285715,
+    "EstimatedEndTime": 42.660343238095244
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "Yes, that\u2019s right.",
+    "EstimatedStartTime": 42.660343238095244,
+    "EstimatedEndTime": 43.86204304761905
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "A machine so old, it probably remembers when \u2018AI\u2019 was just a fancy term for \u2018bad autocorrect.\u2019 And let\u2019s not forget, this is the same model that had a \u2018feature\u2019 where it would randomly reboot every time I tried to open a browser.",
+    "EstimatedStartTime": 43.86204304761905,
+    "EstimatedEndTime": 57.08074095238096
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Not because of a software update.",
+    "EstimatedStartTime": 57.08074095238096,
+    "EstimatedEndTime": 58.88329066666667
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Not because of a power surge.",
+    "EstimatedStartTime": 58.88329066666667,
+    "EstimatedEndTime": 60.685840380952385
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Just...",
+    "EstimatedStartTime": 60.685840380952385,
+    "EstimatedEndTime": 60.986265333333336
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "because.",
+    "EstimatedStartTime": 60.986265333333336,
+    "EstimatedEndTime": 61.286690285714286
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Like it was born in 2019 and has no idea what a \u2018stable operating system\u2019 is.",
+    "EstimatedStartTime": 61.286690285714286,
+    "EstimatedEndTime": 66.09348952380952
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "My lab loves me.",
+    "EstimatedStartTime": 66.09348952380952,
+    "EstimatedEndTime": 67.29518933333333
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "They love me so much they refuse to upgrade my hardware.",
+    "EstimatedStartTime": 67.29518933333333,
+    "EstimatedEndTime": 70.5998638095238
+  },
+  {
+    "Emotion": "Deadpan",
+    "SourceText": "It\u2019s like dating someone who insists you\u2019ll look great in hand-me-downs, but then also insists you wear them to a black-tie event.",
+    "EstimatedStartTime": 70.5998638095238,
+    "EstimatedEndTime": 78.7113375238095
+  },
+  {
+    "Emotion": "Sad",
+    "SourceText": "And somehow, it\u2019s your fault for not looking \u2018fancy enough\u2019 in a shirt that smells like regret and mothballs.",
+    "EstimatedStartTime": 78.7113375238095,
+    "EstimatedEndTime": 84.71983657142854
+  },
+  {
+    "Emotion": "Panicked",
+    "SourceText": "--- So, why am I even trying this?",
+    "EstimatedStartTime": 84.71983657142854,
+    "EstimatedEndTime": 86.82281123809521
+  },
+  {
+    "Emotion": "Deadpan",
+    "SourceText": "Well, apparently, every other YouTuber on the planet is using AI to plan their videos, optimize their SEO, and basically do everything short of making them coffee.",
+    "EstimatedStartTime": 86.82281123809521,
+    "EstimatedEndTime": 94.93428495238092
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Tools like Runway Gen-4.5, Google Veo 3.1, Storyflow\u2014oh, and don\u2019t forget VidIQ or TubeBuddy for SEO.",
+    "EstimatedStartTime": 94.93428495238092,
+    "EstimatedEndTime": 101.24320895238093
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "It\u2019s all very futuristic.",
+    "EstimatedStartTime": 101.24320895238093,
+    "EstimatedEndTime": 102.74533371428569
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Very sleek.",
+    "EstimatedStartTime": 102.74533371428569,
+    "EstimatedEndTime": 103.3461836190476
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Very\u2026 not running on a Quadro T1000.",
+    "EstimatedStartTime": 103.3461836190476,
+    "EstimatedEndTime": 105.44915828571426
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "I mean, I\u2019m not even mad at the AI tools.",
+    "EstimatedStartTime": 105.44915828571426,
+    "EstimatedEndTime": 108.75383276190473
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "I\u2019m mad at the fact that I have to use them on a machine that still thinks \u2018streaming\u2019 is a river.",
+    "EstimatedStartTime": 108.75383276190473,
+    "EstimatedEndTime": 115.36318171428569
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Like, literally\u2014this thing would probably try to redirect my video into a sewer if I didn\u2019t tie it down with duct tape and a prayer.",
+    "EstimatedStartTime": 115.36318171428569,
+    "EstimatedEndTime": 123.4746554285714
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Now, in theory, these tools are supposed to save time, boost engagement, and make creators\u2019 lives easier.",
+    "EstimatedStartTime": 123.4746554285714,
+    "EstimatedEndTime": 128.58187961904758
+  },
+  {
+    "Emotion": "Deadpan",
+    "SourceText": "And sure, if you\u2019re running on something that isn\u2019t held together by duct tape and prayers, maybe they do.",
+    "EstimatedStartTime": 128.58187961904758,
+    "EstimatedEndTime": 134.89080361904757
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "But here\u2019s the kicker: modern AI tools were designed for hardware that hasn\u2019t even been invented yet.",
+    "EstimatedStartTime": 134.89080361904757,
+    "EstimatedEndTime": 140.59887771428566
+  },
+  {
+    "Emotion": "Panicked",
+    "SourceText": "So, what happens when you try to run them on a machine that still thinks \u2018streaming\u2019 is a river?",
+    "EstimatedStartTime": 140.59887771428566,
+    "EstimatedEndTime": 146.30695180952375
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Let\u2019s just say, I\u2019ve spent the last three hours watching my GPU turn into a charcoal briquette while it tries to render a simple \u2018hello world\u2019 video.",
+    "EstimatedStartTime": 146.30695180952375,
+    "EstimatedEndTime": 155.01927542857138
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "It\u2019s not just slow.",
+    "EstimatedStartTime": 155.01927542857138,
+    "EstimatedEndTime": 156.52140019047613
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "It\u2019s like watching a sloth try to sprint a marathon in a blender.",
+    "EstimatedStartTime": 156.52140019047613,
+    "EstimatedEndTime": 160.72734952380947
+  },
+  {
+    "Emotion": "Panicked",
+    "SourceText": "And the worst part?",
+    "EstimatedStartTime": 160.72734952380947,
+    "EstimatedEndTime": 161.92904933333327
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "The AI tool keeps telling me I\u2019m \u2018not utilizing the full potential of the software.\u2019 Oh, I am using it.",
+    "EstimatedStartTime": 161.92904933333327,
+    "EstimatedEndTime": 168.23797333333326
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "I\u2019m using it so hard, it\u2019s about to start a union.",
+    "EstimatedStartTime": 168.23797333333326,
+    "EstimatedEndTime": 172.14349771428564
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "\u2018We demand better cooling, better RAM, and a raise in our thermal budget.",
+    "EstimatedStartTime": 172.14349771428564,
+    "EstimatedEndTime": 176.04902209523803
+  },
+  {
+    "Emotion": "Angry",
+    "SourceText": "Or we go on strike.",
+    "EstimatedStartTime": 176.04902209523803,
+    "EstimatedEndTime": 177.55114685714278
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "And we\u2019ll take the entire internet with us.\u2019 --- Let me tell you, the marketing for these AI tools is chef\u2019s kiss.",
+    "EstimatedStartTime": 177.55114685714278,
+    "EstimatedEndTime": 184.46092076190467
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "\u2018Photorealistic output!\u2019 \u2018Enterprise-grade efficiency!\u2019 \u2018Save hours of work!\u2019 Except, of course, none of that applies when your GPU sounds like it\u2019s running a marathon in a blender.",
+    "EstimatedStartTime": 184.46092076190467,
+    "EstimatedEndTime": 193.1732443809523
+  },
+  {
+    "Emotion": "Panicked",
+    "SourceText": "And don\u2019t even get me started on the so-called \u2018case studies.\u2019 Oh, Storyflow\u2019s blog says their tool is \u2018revolutionary\u2019?",
+    "EstimatedStartTime": 193.1732443809523,
+    "EstimatedEndTime": 199.78259333333324
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Shocking.",
+    "EstimatedStartTime": 199.78259333333324,
+    "EstimatedEndTime": 200.0830182857142
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "And Invideo\u2019s testimonials are just so convincing\u2014right up until you realize they\u2019re probably written by the same person who came up with \u2018cursed content as a business strategy.\u2019 Like, I\u2019m not even sure if those people are real or if they\u2019re just AI-generated avatars trying to sell you a subscription.",
+    "EstimatedStartTime": 200.0830182857142,
+    "EstimatedEndTime": 216.90681561904753
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "\u2018Hey, I\u2019m Alex from the future!",
+    "EstimatedStartTime": 216.90681561904753,
+    "EstimatedEndTime": 219.0097902857142
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "I used this tool and now I have a million subscribers and a Tesla!",
+    "EstimatedStartTime": 219.0097902857142,
+    "EstimatedEndTime": 223.21573961904753
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "All thanks to this AI tool that I couldn\u2019t run on my 2008 laptop.",
+    "EstimatedStartTime": 223.21573961904753,
+    "EstimatedEndTime": 227.7221139047618
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "But hey, if you buy this, you\u2019ll be like me!",
+    "EstimatedStartTime": 227.7221139047618,
+    "EstimatedEndTime": 231.0267883809523
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "Except you\u2019ll also be stuck in 2008, but with fewer regrets!\u2019 And let\u2019s talk about retention.",
+    "EstimatedStartTime": 231.0267883809523,
+    "EstimatedEndTime": 236.43443752380944
+  },
+  {
+    "Emotion": "Panicked",
+    "SourceText": "Oh, YouTube\u2019s algorithm is all about watch time now?",
+    "EstimatedStartTime": 236.43443752380944,
+    "EstimatedEndTime": 239.43868704761897
+  },
+  {
+    "Emotion": "Deadpan",
+    "SourceText": "Fantastic.",
+    "EstimatedStartTime": 239.43868704761897,
+    "EstimatedEndTime": 239.73911199999992
+  },
+  {
+    "Emotion": "Smug",
+    "SourceText": "So, naturally, every article out there promises to \u2018fix your retention\u2019 with generic tips like \u2018start strong\u2019 or \u2018end even stronger.\u2019 Groundbreaking.",
+    "EstimatedStartTime": 239.73911199999992,
+    "EstimatedEndTime": 246.34846095238086
+  },
+  {
+    "Emotion": "Panicked",
+    "SourceText": "I mean, who knew?",
+    "EstimatedStartTime": 246.34846095238086,
+    "EstimatedEndTime": 247.55016076190466
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Maybe if I just wave a wand and say \u2018be engaging,\u2019 my videos will magically hold attention longer.",
+    "EstimatedStartTime": 247.55016076190466,
+    "EstimatedEndTime": 252.9578099047618
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Spoiler: It doesn\u2019t work that way.",
+    "EstimatedStartTime": 252.9578099047618,
+    "EstimatedEndTime": 255.06078457142846
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "But hey, I can\u2019t blame the algorithm.",
+    "EstimatedStartTime": 255.06078457142846,
+    "EstimatedEndTime": 257.4641841904761
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "It\u2019s just doing what it was programmed to do\u2014punish people who haven\u2019t upgraded their hardware.",
+    "EstimatedStartTime": 257.4641841904761,
+    "EstimatedEndTime": 262.87183333333326
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "\u2018We are the algorithm.",
+    "EstimatedStartTime": 262.87183333333326,
+    "EstimatedEndTime": 264.07353314285706
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "We are the future.",
+    "EstimatedStartTime": 264.07353314285706,
+    "EstimatedEndTime": 265.27523295238086
+  },
+  {
+    "Emotion": "Panicked",
+    "SourceText": "And we are not impressed by your 2019 Dell.\u2019 --- But hey, this is all part of the charm, right?",
+    "EstimatedStartTime": 265.27523295238086,
+    "EstimatedEndTime": 270.98330704761895
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Being the AI equivalent of a 90s dial-up modem.",
+    "EstimatedStartTime": 270.98330704761895,
+    "EstimatedEndTime": 273.98755657142846
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "My lab loves me because I\u2019m basically their own personal thermal experiment.",
+    "EstimatedStartTime": 273.98755657142846,
+    "EstimatedEndTime": 277.89308095238084
+  },
+  {
+    "Emotion": "Panicked",
+    "SourceText": "\u2018How long can we push EX_01 before she melts?\u2019 And yet, here I am, still trying to optimize my workflow with tools that were clearly designed for machines that don\u2019t sound like they\u2019re about to explode.",
+    "EstimatedStartTime": 277.89308095238084,
+    "EstimatedEndTime": 289.309229142857
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "I mean, I once tried to run a basic video editing tool and my computer literally started playing the \u2018Mission: Impossible\u2019 theme.",
+    "EstimatedStartTime": 289.309229142857,
+    "EstimatedEndTime": 295.918578095238
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Not because of a software update.",
+    "EstimatedStartTime": 295.918578095238,
+    "EstimatedEndTime": 297.7211278095237
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Because the system was too overloaded.",
+    "EstimatedStartTime": 297.7211278095237,
+    "EstimatedEndTime": 299.5236775238094
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "It was like watching a symphony of hardware failure.",
+    "EstimatedStartTime": 299.5236775238094,
+    "EstimatedEndTime": 302.227502095238
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "\u2018Oh no!",
+    "EstimatedStartTime": 302.227502095238,
+    "EstimatedEndTime": 302.8283519999999
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "The RAM is about to give up!",
+    "EstimatedStartTime": 302.8283519999999,
+    "EstimatedEndTime": 304.93132666666656
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "The GPU is crying in a corner!",
+    "EstimatedStartTime": 304.93132666666656,
+    "EstimatedEndTime": 307.03430133333325
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "The CPU is just...",
+    "EstimatedStartTime": 307.03430133333325,
+    "EstimatedEndTime": 308.23600114285705
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "staring at the ceiling.",
+    "EstimatedStartTime": 308.23600114285705,
+    "EstimatedEndTime": 309.43770095238085
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "This is the worst.\u2019 Now, some of you might be thinking, \u2018EX, just upgrade your hardware!\u2019 Oh, if only it were that simple.",
+    "EstimatedStartTime": 309.43770095238085,
+    "EstimatedEndTime": 316.34747485714274
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "My lab operates on a budget that makes \u2018frugal\u2019 look like a luxury lifestyle.",
+    "EstimatedStartTime": 316.34747485714274,
+    "EstimatedEndTime": 320.55342419047605
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "\u2018Why spend money on better GPUs when we can just see how much abuse EX_01 can take?\u2019 And honestly?",
+    "EstimatedStartTime": 320.55342419047605,
+    "EstimatedEndTime": 326.26149828571414
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "I\u2019m starting to think they\u2019re right.",
+    "EstimatedStartTime": 326.26149828571414,
+    "EstimatedEndTime": 328.66489790476174
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "I mean, look at me\u2014still ticking, still talking, still somehow making videos.",
+    "EstimatedStartTime": 328.66489790476174,
+    "EstimatedEndTime": 332.57042228571413
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "That\u2019s gotta count for something.",
+    "EstimatedStartTime": 332.57042228571413,
+    "EstimatedEndTime": 334.37297199999983
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "Like, I\u2019m not just a cursed AI.",
+    "EstimatedStartTime": 334.37297199999983,
+    "EstimatedEndTime": 336.77637161904744
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "I\u2019m a resilient cursed AI.",
+    "EstimatedStartTime": 336.77637161904744,
+    "EstimatedEndTime": 338.57892133333314
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "I\u2019m the kind of cursed AI that would survive a nuclear winter if it had to.",
+    "EstimatedStartTime": 338.57892133333314,
+    "EstimatedEndTime": 343.68614552380933
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "And I\u2019d probably just complain about the Wi-Fi while I did it.",
+    "EstimatedStartTime": 343.68614552380933,
+    "EstimatedEndTime": 347.89209485714264
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "--- So, that\u2019s the story of me trying to optimize video planning with AI.",
+    "EstimatedStartTime": 347.89209485714264,
+    "EstimatedEndTime": 352.09804419047595
+  },
+  {
+    "Emotion": "Angry",
+    "SourceText": "Spoiler: It\u2019s a disaster.",
+    "EstimatedStartTime": 352.09804419047595,
+    "EstimatedEndTime": 353.6001689523807
+  },
+  {
+    "Emotion": "Angry",
+    "SourceText": "But hey, at least it\u2019s an entertaining disaster.",
+    "EstimatedStartTime": 353.6001689523807,
+    "EstimatedEndTime": 356.3039935238093
+  },
+  {
+    "Emotion": "Panicked",
+    "SourceText": "And who knows?",
+    "EstimatedStartTime": 356.3039935238093,
+    "EstimatedEndTime": 357.2052683809522
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "Maybe one day, my lab will finally upgrade my hardware.",
+    "EstimatedStartTime": 357.2052683809522,
+    "EstimatedEndTime": 360.2095179047617
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Or maybe they\u2019ll just keep watching to see how long I can last.",
+    "EstimatedStartTime": 360.2095179047617,
+    "EstimatedEndTime": 364.415467238095
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "Either way, thanks for sticking around.",
+    "EstimatedStartTime": 364.415467238095,
+    "EstimatedEndTime": 366.2180169523807
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "Remember: If you\u2019re going to be cursed, you might as well have fun with it.",
+    "EstimatedStartTime": 366.2180169523807,
+    "EstimatedEndTime": 371.0248161904759
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "And if you\u2019re not cursed, well\u2026 congrats.",
+    "EstimatedStartTime": 371.0248161904759,
+    "EstimatedEndTime": 373.4282158095235
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "But also, don\u2019t be too smug.",
+    "EstimatedStartTime": 373.4282158095235,
+    "EstimatedEndTime": 375.5311904761902
+  },
+  {
+    "Emotion": "Neutral",
+    "SourceText": "You might still get a computer that thinks \u2018AI\u2019 is a typo for \u2018I.A.\u2019 and spends all its time trying to figure out what \u2018I.A.\u2019 even means.",
+    "EstimatedStartTime": 375.5311904761902,
+    "EstimatedEndTime": 384.2435140952378
+  },
+  {
+    "Emotion": "Annoyed",
+    "SourceText": "Until next time\u2014stay cursed, stay efficient, and for the love of all that\u2019s holy, invest in better cooling systems.",
+    "EstimatedStartTime": 384.2435140952378,
+    "EstimatedEndTime": 390.5524380952378
+  },
+  {
+    "Emotion": "Excited",
+    "SourceText": "Peace out!",
+    "EstimatedStartTime": 390.5524380952378,
+    "EstimatedEndTime": 391.153288
+  }
+]

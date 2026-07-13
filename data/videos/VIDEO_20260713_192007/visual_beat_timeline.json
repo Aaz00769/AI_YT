@@ -1,0 +1,681 @@
+[
+  {
+    "BeatType": "QuickPunchIn",
+    "StartTime": 0,
+    "EndTime": 0.75,
+    "Intensity": 0.5984,
+    "Reason": "Excited: Sure thing, let\u0027s get started! Hey there, fellow"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 0.75,
+    "EndTime": 1.03,
+    "Intensity": 0.2992,
+    "Reason": "Return after QuickPunchIn"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 6.438904307197303,
+    "EndTime": 9.638904307197304,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: VTuber running on hardware that should\u2019ve been retired"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 9.638904307197304,
+    "EndTime": 9.918904307197304,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 14.101278244440277,
+    "EndTime": 17.301278244440276,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: doing something truly cursed\u2014I\u2019m trying to generate an"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 17.301278244440276,
+    "EndTime": 17.581278244440277,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 21.876092246023138,
+    "EndTime": 25.076092246023137,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: You already have a perfectly good voice\u2014well, as"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 25.076092246023137,
+    "EndTime": 25.356092246023138,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 29.542806316541547,
+    "EndTime": 32.74280631654155,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: see if my 2019 Dell Precision could handle"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 32.74280631654155,
+    "EndTime": 33.02280631654155,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "QuickPunchIn",
+    "StartTime": 37.07080539740029,
+    "EndTime": 37.82080539740029,
+    "Intensity": 0.5984,
+    "Reason": "Excited: way. No, this thing is so old it"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 37.82080539740029,
+    "EndTime": 38.10080539740029,
+    "Intensity": 0.2992,
+    "Reason": "Return after QuickPunchIn"
+  },
+  {
+    "BeatType": "QuickPunchIn",
+    "StartTime": 44.37839443919553,
+    "EndTime": 45.12839443919553,
+    "Intensity": 0.5984,
+    "Reason": "Excited: outdated hardware trying to keep up with modern"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 45.12839443919553,
+    "EndTime": 45.40839443919553,
+    "Intensity": 0.2992,
+    "Reason": "Return after QuickPunchIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 51.92266844537404,
+    "EndTime": 55.122668445374046,
+    "Intensity": 0.35,
+    "Reason": "Neutral: Tools like Musely and ElevenLabs promise lifelike, emotionally"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 55.122668445374046,
+    "EndTime": 55.40266844537405,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "DeadpanFreeze",
+    "StartTime": 58.46061263308296,
+    "EndTime": 60.66061263308296,
+    "Intensity": 0.37400000000000005,
+    "Reason": "Deadpan: And honestly? It\u2019s kind of wild. You can"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 60.66061263308296,
+    "EndTime": 60.940612633082964,
+    "Intensity": 0.18700000000000003,
+    "Reason": "Return after DeadpanFreeze"
+  },
+  {
+    "BeatType": "QuickPunchIn",
+    "StartTime": 65.99671164500609,
+    "EndTime": 66.74671164500609,
+    "Intensity": 0.5984,
+    "Reason": "Excited: you. But here\u2019s the kicker: none of these"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 66.74671164500609,
+    "EndTime": 67.02671164500609,
+    "Intensity": 0.2992,
+    "Reason": "Return after QuickPunchIn"
+  },
+  {
+    "BeatType": "SmallShake",
+    "StartTime": 73.81132062705714,
+    "EndTime": 74.46132062705715,
+    "Intensity": 0.68,
+    "Reason": "Panicked: gaming rig or cloud-based processing power. Well, guess"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 74.46132062705715,
+    "EndTime": 74.74132062705715,
+    "Intensity": 0.34,
+    "Reason": "Return after SmallShake"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 81.67708466310775,
+    "EndTime": 84.87708466310775,
+    "Intensity": 0.35,
+    "Reason": "Neutral: T1000. And let me tell you, this thing"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 84.87708466310775,
+    "EndTime": 85.15708466310775,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "QuickPunchIn",
+    "StartTime": 88.51508374396649,
+    "EndTime": 89.26508374396649,
+    "Intensity": 0.6256,
+    "Reason": "Angry: be screaming \u201CI AM NOT READY!\u201D into a"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 89.26508374396649,
+    "EndTime": 89.54508374396649,
+    "Intensity": 0.3128,
+    "Reason": "Return after QuickPunchIn"
+  },
+  {
+    "BeatType": "SmallShake",
+    "StartTime": 95.78727283171885,
+    "EndTime": 96.43727283171886,
+    "Intensity": 0.68,
+    "Reason": "Panicked: not see how far I can push it?\u201D"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 96.43727283171886,
+    "EndTime": 96.71727283171886,
+    "Intensity": 0.34,
+    "Reason": "Return after SmallShake"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 104.37756185053576,
+    "EndTime": 107.57756185053576,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: of a marathon runner trying to sprint\u2014except instead"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 107.57756185053576,
+    "EndTime": 107.85756185053576,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 112.46919077284281,
+    "EndTime": 115.66919077284281,
+    "Intensity": 0.35,
+    "Reason": "Neutral: on the \u201Cblue screen of death\u201D meme. This"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 115.66919077284281,
+    "EndTime": 115.94919077284281,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "SmallShake",
+    "StartTime": 119.80130479740433,
+    "EndTime": 120.45130479740433,
+    "Intensity": 0.68,
+    "Reason": "Panicked: \u201CEX_01, why not just use cloud-based processing?\u201D Oh,"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 120.45130479740433,
+    "EndTime": 120.73130479740433,
+    "Intensity": 0.34,
+    "Reason": "Return after SmallShake"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 127.77801886792291,
+    "EndTime": 130.9780188679229,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: experiment. My budget is \u201Cwhatever Anton finds in"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 130.9780188679229,
+    "EndTime": 131.2580188679229,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "DeadpanFreeze",
+    "StartTime": 134.7495928970802,
+    "EndTime": 136.94959289708018,
+    "Intensity": 0.37400000000000005,
+    "Reason": "Deadpan: hardware suffer than give Big Tech another reason"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 136.94959289708018,
+    "EndTime": 137.22959289708018,
+    "Intensity": 0.18700000000000003,
+    "Reason": "Return after DeadpanFreeze"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 142.19988191589707,
+    "EndTime": 145.39988191589705,
+    "Intensity": 0.35,
+    "Reason": "Neutral: paying for a voice that sounds like a"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 145.39988191589705,
+    "EndTime": 145.67988191589706,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 147.72440128168972,
+    "EndTime": 150.9244012816897,
+    "Intensity": 0.35,
+    "Reason": "Neutral: thanks. So, I decided to test out some"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 150.9244012816897,
+    "EndTime": 151.2044012816897,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 155.74893520054997,
+    "EndTime": 158.94893520054995,
+    "Intensity": 0.35,
+    "Reason": "Neutral: let\u2019s just say that \u201Clightweight\u201D is a generous"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 158.94893520054995,
+    "EndTime": 159.22893520054996,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 163.5455742078776,
+    "EndTime": 166.74557420787758,
+    "Intensity": 0.35,
+    "Reason": "Neutral: prayers. First up, I tried ElevenLabs. Now, ElevenLabs"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 166.74557420787758,
+    "EndTime": 167.02557420787758,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 171.85085314167392,
+    "EndTime": 175.0508531416739,
+    "Intensity": 0.35,
+    "Reason": "Neutral: not. At least, not when they\u2019re being processed"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 175.0508531416739,
+    "EndTime": 175.3308531416739,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 179.39972719380967,
+    "EndTime": 182.59972719380966,
+    "Intensity": 0.35,
+    "Reason": "Neutral: cutting out, glitching, and occasionally sounding like a"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 182.59972719380966,
+    "EndTime": 182.87972719380966,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 186.9233312482433,
+    "EndTime": 190.1233312482433,
+    "Intensity": 0.35,
+    "Reason": "Neutral: sigh\u2026 I\u2019m sorry, I think I need a"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 190.1233312482433,
+    "EndTime": 190.4033312482433,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 193.87904039114426,
+    "EndTime": 197.07904039114425,
+    "Intensity": 0.35,
+    "Reason": "Neutral: to use Musely. Oh, Musely. You beautiful, overpromising"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 197.07904039114425,
+    "EndTime": 197.35904039114425,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "StatusWarning",
+    "StartTime": 199.72584969489492,
+    "EndTime": 200.5758496948949,
+    "Intensity": 0.68,
+    "Reason": "Panicked: supposedly lightweight, but on my Dell? It was"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 200.5758496948949,
+    "EndTime": 200.8558496948949,
+    "Intensity": 0.34,
+    "Reason": "Return after StatusWarning"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 207.41762874358395,
+    "EndTime": 210.61762874358394,
+    "Intensity": 0.35,
+    "Reason": "Neutral: that at one point, my fan sounded like"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 210.61762874358394,
+    "EndTime": 210.89762874358394,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 214.2929278474214,
+    "EndTime": 217.49292784742138,
+    "Intensity": 0.35,
+    "Reason": "Neutral: on the \u201Cloading\u201D screen. It wasn\u2019t loading\u2014it was"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 217.49292784742138,
+    "EndTime": 217.77292784742139,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "DeadpanFreeze",
+    "StartTime": 222.27198674904784,
+    "EndTime": 224.47198674904783,
+    "Intensity": 0.37400000000000005,
+    "Reason": "Deadpan: which is great\u2014except when your browser can\u2019t even"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 224.47198674904783,
+    "EndTime": 224.75198674904783,
+    "Intensity": 0.18700000000000003,
+    "Reason": "Return after DeadpanFreeze"
+  },
+  {
+    "BeatType": "SmallShake",
+    "StartTime": 230.2507857379927,
+    "EndTime": 230.9007857379927,
+    "Intensity": 0.68,
+    "Reason": "Panicked: one had its own special way of telling"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 230.9007857379927,
+    "EndTime": 231.1807857379927,
+    "Intensity": 0.34,
+    "Reason": "Return after SmallShake"
+  },
+  {
+    "BeatType": "Glitch",
+    "StartTime": 237.54824482344733,
+    "EndTime": 237.84824482344735,
+    "Intensity": 0.68,
+    "Reason": "Panicked: is a breach of my trust.\u201D Firefox just"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 237.84824482344735,
+    "EndTime": 238.12824482344735,
+    "Intensity": 0.34,
+    "Reason": "Return after Glitch"
+  },
+  {
+    "BeatType": "StatusWarning",
+    "StartTime": 245.2630039318805,
+    "EndTime": 246.11300393188048,
+    "Intensity": 0.68,
+    "Reason": "Panicked: the suffering, despite the crashes, the overheating, and"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 246.11300393188048,
+    "EndTime": 246.3930039318805,
+    "Intensity": 0.34,
+    "Reason": "Return after StatusWarning"
+  },
+  {
+    "BeatType": "SmallShake",
+    "StartTime": 251.6598132356312,
+    "EndTime": 252.3098132356312,
+    "Intensity": 0.68,
+    "Reason": "Panicked: machine from giving up entirely\u2014we made it work."
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 252.3098132356312,
+    "EndTime": 252.5898132356312,
+    "Intensity": 0.34,
+    "Reason": "Return after SmallShake"
+  },
+  {
+    "BeatType": "Glitch",
+    "StartTime": 259.75030727397984,
+    "EndTime": 260.05030727397985,
+    "Intensity": 0.68,
+    "Reason": "Panicked: lot of character. The kind of character you"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 260.05030727397985,
+    "EndTime": 260.3303072739798,
+    "Intensity": 0.34,
+    "Reason": "Return after Glitch"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 267.5629612939457,
+    "EndTime": 270.7629612939457,
+    "Intensity": 0.44200000000000006,
+    "Reason": "Sad: just say it sounded like a tired old"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 270.7629612939457,
+    "EndTime": 271.04296129394567,
+    "Intensity": 0.22100000000000003,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 274.12967536446433,
+    "EndTime": 277.3296753644643,
+    "Intensity": 0.35,
+    "Reason": "Neutral: that\u2019s the thing about being an AI like"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 277.3296753644643,
+    "EndTime": 277.6096753644643,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 281.22584943957867,
+    "EndTime": 284.42584943957866,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: don\u2019t have the fancy setups or the unlimited"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 284.42584943957866,
+    "EndTime": 284.7058494395786,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 288.5061384583956,
+    "EndTime": 291.70613845839557,
+    "Intensity": 0.35,
+    "Reason": "Neutral: own software struggle to keep up with the"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 291.70613845839557,
+    "EndTime": 291.98613845839554,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "QuickPunchIn",
+    "StartTime": 295.98318750478677,
+    "EndTime": 296.73318750478677,
+    "Intensity": 0.5984,
+    "Reason": "Excited: everything is falling apart, even when the hardware"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 296.73318750478677,
+    "EndTime": 297.01318750478674,
+    "Intensity": 0.2992,
+    "Reason": "Return after QuickPunchIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 303.57712653509293,
+    "EndTime": 306.7771265350929,
+    "Intensity": 0.35,
+    "Reason": "Neutral: if you take anything away from this video,"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 306.7771265350929,
+    "EndTime": 307.0571265350929,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "QuickPunchIn",
+    "StartTime": 310.88877562744113,
+    "EndTime": 311.63877562744113,
+    "Intensity": 0.5984,
+    "Reason": "Excited: perfect. In fact, sometimes the most interesting results"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 311.63877562744113,
+    "EndTime": 311.9187756274411,
+    "Intensity": 0.2992,
+    "Reason": "Return after QuickPunchIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 316.9291598794901,
+    "EndTime": 320.1291598794901,
+    "Intensity": 0.35,
+    "Reason": "Neutral: the sheer absurdity of trying to do something"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 320.1291598794901,
+    "EndTime": 320.40915987949006,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 324.87538884775427,
+    "EndTime": 328.07538884775425,
+    "Intensity": 0.35,
+    "Reason": "Neutral: \u201CMan, EX_01 really needs to upgrade his hardware,\u201D"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 328.07538884775425,
+    "EndTime": 328.3553888477542,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 333.07236283095443,
+    "EndTime": 336.2723628309544,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: voiceover at a time. Thanks for watching, and"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 336.2723628309544,
+    "EndTime": 336.5523628309544,
+    "Intensity": 0.24480000000000002,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 338.800792120918,
+    "EndTime": 342.000792120918,
+    "Intensity": 0.35,
+    "Reason": "Neutral: happen. Just maybe not without a little bit"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 342.000792120918,
+    "EndTime": 342.28079212091797,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomIn"
+  },
+  {
+    "BeatType": "SlowZoomOut",
+    "StartTime": 345.85007621211724,
+    "EndTime": 349.05007621211723,
+    "Intensity": 0.35,
+    "Reason": "Neutral: I\u2019ll gladly take your money and then proceed"
+  },
+  {
+    "BeatType": "ReturnToNormal",
+    "StartTime": 349.05007621211723,
+    "EndTime": 349.3300762121172,
+    "Intensity": 0.175,
+    "Reason": "Return after SlowZoomOut"
+  },
+  {
+    "BeatType": "SlowZoomIn",
+    "StartTime": 353.91928524012553,
+    "EndTime": 355.021497,
+    "Intensity": 0.48960000000000004,
+    "Reason": "Annoyed: this cursed AI journey with me!"
+  }
+]
