@@ -1,5 +1,4 @@
 using System.Text.Json;
-using AI_YOUTUBER.Infrastructure;
 
 namespace AI_YOUTUBER.Functions.RESEARCH;
 
@@ -9,11 +8,7 @@ public static class WebSearch
 
     public static async Task<List<SearchResult>> SearchAsync(string query, int maxResults = 5)
     {
-        await LocalServiceManager.EnsureSearxngRunningAsync();
-
-        string searxngBaseUrl = Environment.GetEnvironmentVariable("SEARXNG_URL")
-            ?? "http://localhost:8080";
-        string searxngUrl = searxngBaseUrl.TrimEnd('/') + "/search";
+        string searxngUrl = "http://localhost:8080/search";
 
         string url =
             $"{searxngUrl}?q={Uri.EscapeDataString(query)}&format=json&language=en";
