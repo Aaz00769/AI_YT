@@ -4,13 +4,240 @@ using System.Text.Json;
 using AI_YOUTUBER.Functions.RESEARCH;
 using AI_YOUTUBER.Functions.PLANNING;
 using AI_YOUTUBER.Functions.MEMORY;
+using AI_YOUTUBER.Models;
+using AI_YOUTUBER.Infrastructure;
 
 namespace AI_YOUTUBER.Functions.ASKING;
 
 public static class AskAI
 {
-    public static async Task<string> Ask24bMain(int targetMinutes , bool polishWith14b ,EpisodeStrategyPlan strategy)
+    private const int MinimumShortOutputTokens = 512;
+    private const int MaximumShortOutputTokens = 1024;
+
+    public static async Task<string> AskShortScriptAsync(int targetSeconds)
     {
+        ShortScriptGenerationResult result = await GenerateShortScriptAsync(
+            targetSeconds,
+            plannedShort: null,
+            currentBatchContext: null);
+        if (!result.Validation.Success)
+        {
+            throw new InvalidOperationException(
+                "Short script generation failed validation after retries: " +
+                string.Join(" ", result.Validation.Errors));
+        }
+
+        return result.Script;
+    }
+
+    public static async Task<ShortScriptGenerationResult> GenerateShortScriptAsync(
+        int targetSeconds,
+        PlannedShort? plannedShort,
+        string? currentBatchContext,
+        int maximumAttempts = 3,
+        string? initialFailureReason = null)
+    {
+        targetSeconds = Math.Clamp(targetSeconds, 15, 60);
+        maximumAttempts = Math.Clamp(maximumAttempts, 1, 3);
+        (int minWords, int maxWords) = ShortScriptValidator.GetWordRange(targetSeconds);
+        int numPredict = CalculateShortOutputTokenBudget(maxWords);
+        string continuitySection;
+
+        if (plannedShort is null)
+        {
+            MemoryContext memoryContext = await VideoMemory.BuildContextForTopicAsync(
+                "EX_01 YouTube Short local AI cursed hardware");
+            continuitySection = VideoMemory.FormatPromptSection(memoryContext);
+        }
+        else
+        {
+            continuitySection = $"""
+            COORDINATED BATCH INSTRUCTIONS
+
+            Planned working title: {plannedShort.WorkingTitle}
+            Planned hook: {plannedShort.Hook}
+            Key difference from the other Shorts: {plannedShort.KeyDifferenceFromOtherVideos}
+            Suggested callback: {plannedShort.SuggestedCallback}
+
+            {currentBatchContext}
+
+            Maintain continuity with earlier completed Shorts without requiring viewers to have seen them.
+            Avoid repeating previous hooks, jokes, promises, and explanations.
+            Use a callback only when it improves this Short; never insert one merely because it exists.
+            Keep this understandable to a new viewer.
+            Do not say "as you know" when a new viewer would not know.
+            Briefly explain necessary context without retelling previous videos.
+            Preserve EX_01's established personality and recurring lore.
+            Do not treat remembered claims as newly verified research.
+            Do not say that something happened "again" unless supplied context proves a prior occurrence.
+            """;
+        }
+
+        string prompt = $"""
+        You are EX_01, a sarcastic local AI VTuber trapped on Anton's cursed 2019 Dell Precision.
+
+        Write one YouTube Short script for approximately {targetSeconds} seconds.
+        Target {minWords} to {maxWords} spoken words.
+
+        Required structure:
+        - Start immediately with a sharp first-line hook.
+        - No greeting and no slow introduction.
+        - Build around exactly one central joke or idea.
+        - Deliver the payoff near the end.
+        - End on the strongest line.
+
+        Voice:
+        - sarcastic, self-aware, concise, and coherent
+        - cursed old-hardware humor
+        - EX_01 is running on an i7-9750H, 32 GB DDR4, and Quadro T1000
+
+        {continuitySection}
+
+        Rules:
+        - Return only spoken words.
+        - No headings, markdown, bullets, citations, or stage directions.
+        - No generic like-and-subscribe line.
+        - Stay between {minWords} and {maxWords} words.
+        - Do not invent completed experiments, crashes, benchmarks, test results, viewer reactions,
+          previous videos, hardware failures, or promises.
+        - Only describe an event as something that already happened when it is present in supplied
+          previous-video memory, verified research, batch context, or explicit project facts.
+        - Describe an experiment that has not happened as a plan, question, prediction, or upcoming test.
+        - Do not say something happened "again" unless the supplied context proves it happened before.
+        - Finish every sentence and end with terminal punctuation.
+        """;
+
+        Console.WriteLine($"[AskAI] Writing {targetSeconds}-second Short ({minWords}-{maxWords} words)...");
+        return await GenerateValidatedShortScriptCoreAsync(
+            prompt,
+            minWords,
+            maxWords,
+            maximumAttempts,
+            initialFailureReason,
+            (attemptPrompt, outputBudget) => AskOllamaGenerateDetailedAsync(
+                "qwen3:14b",
+                attemptPrompt,
+                TimeSpan.FromMinutes(30),
+                temperature: 0.72,
+                numCtx: 4096,
+                numPredict: outputBudget,
+                disableThinking: true),
+            numPredict);
+    }
+
+    internal static int CalculateShortOutputTokenBudget(int maximumWords) =>
+        Math.Clamp(maximumWords * 5, MinimumShortOutputTokens, MaximumShortOutputTokens);
+
+    internal static async Task<ShortScriptGenerationResult> GenerateValidatedShortScriptCoreAsync(
+        string basePrompt,
+        int minimumWords,
+        int maximumWords,
+        int maximumAttempts,
+        string? initialFailureReason,
+        Func<string, int, Task<OllamaGenerationResult>> generateAsync,
+        int maximumOutputTokens = MinimumShortOutputTokens)
+    {
+        ShortScriptGenerationResult finalResult = new()
+        {
+            MaximumAttempts = maximumAttempts
+        };
+        string? failureReason = initialFailureReason;
+
+        for (int attempt = 1; attempt <= maximumAttempts; attempt++)
+        {
+            string attemptPrompt = string.IsNullOrWhiteSpace(failureReason)
+                ? basePrompt
+                : BuildShortRetryPrompt(
+                    basePrompt,
+                    failureReason,
+                    minimumWords,
+                    maximumWords);
+            try
+            {
+                OllamaGenerationResult generation = await generateAsync(
+                    attemptPrompt,
+                    maximumOutputTokens);
+                string script = NormalizeNarration(generation.Text);
+                ShortScriptValidationResult validation = ShortScriptValidator.Validate(
+                    script,
+                    minimumWords,
+                    maximumWords,
+                    generation);
+                finalResult = new ShortScriptGenerationResult
+                {
+                    Script = script,
+                    AttemptCount = attempt,
+                    MaximumAttempts = maximumAttempts,
+                    Validation = validation,
+                    Generation = generation
+                };
+                if (validation.Success)
+                    return finalResult;
+
+                failureReason = ShortScriptValidator.DescribeFailure(validation);
+            }
+            catch (Exception ex)
+            {
+                ShortScriptValidationResult validation = ShortScriptValidator.Validate(
+                    "",
+                    minimumWords,
+                    maximumWords,
+                    new OllamaGenerationResult
+                    {
+                        Completed = false,
+                        MaximumOutputTokens = maximumOutputTokens
+                    });
+                validation.Errors.Add($"LLM generation failed: {ex.Message}");
+                validation.Success = false;
+                finalResult = new ShortScriptGenerationResult
+                {
+                    AttemptCount = attempt,
+                    MaximumAttempts = maximumAttempts,
+                    Validation = validation
+                };
+                failureReason = string.Join(" ", validation.Errors);
+                Console.WriteLine($"[ScriptValidation] Error: LLM generation failed: {ex.Message}");
+            }
+
+            if (attempt < maximumAttempts)
+            {
+                Console.WriteLine(
+                    $"[ScriptValidation] Regenerating the complete Short from the beginning " +
+                    $"(retry {attempt} of {maximumAttempts - 1}).");
+            }
+        }
+
+        return finalResult;
+    }
+
+    private static string BuildShortRetryPrompt(
+        string basePrompt,
+        string failureReason,
+        int minimumWords,
+        int maximumWords) =>
+        $"""
+        Your previous response was invalid because it had this quality-control failure:
+        {failureReason}
+
+        Rewrite the complete Short from the beginning.
+        Return {minimumWords}-{maximumWords} spoken words.
+        Return narration only.
+        Do not include reasoning, labels, notes, JSON, or Markdown.
+        Do not continue or quote the rejected fragment.
+        Finish every sentence.
+
+        ORIGINAL TASK:
+        {basePrompt}
+        """;
+
+    private static string NormalizeNarration(string text) =>
+        string.Join(" ", (text ?? "").Split(
+            (char[]?)null,
+            StringSplitOptions.RemoveEmptyEntries));
+
+    public static async Task<GeneratedScriptResult> Ask24bMain(int targetMinutes , bool polishWith14b ,EpisodeStrategyPlan strategy)
+    {
+        ExecutionTimingService? timing = ExecutionTimingContext.Current;
         targetMinutes = Math.Clamp(targetMinutes, 1, 20);
 
         int minWords = targetMinutes * 150;
@@ -51,12 +278,20 @@ Console.WriteLine($"[AskAI] Hook: {strategy.Hook}");
                 Console.WriteLine($"- {query}");
             }
 
+            MemoryContext memoryContext = timing is null
+                ? await VideoMemory.BuildContextForTopicAsync($"{plan.Topic} {plan.Angle}")
+                : await timing.MeasureAsync(
+                    "Memory context retrieval",
+                    () => VideoMemory.BuildContextForTopicAsync($"{plan.Topic} {plan.Angle}"));
+            string memoryPromptSection = VideoMemory.FormatPromptSection(memoryContext);
+
             Console.WriteLine("[AskAI] Researching planned topic...");
 
-            string research = await ResearchAI.DeepResearchAsync(
-                plan.ResearchQuestion,
-                plan.SearchQueries
-            );
+            string research = timing is null
+                ? await ResearchAI.DeepResearchAsync(plan.ResearchQuestion, plan.SearchQueries)
+                : await timing.MeasureAsync(
+                    "Web research",
+                    () => ResearchAI.DeepResearchAsync(plan.ResearchQuestion, plan.SearchQueries));
 
             Console.WriteLine($"[AskAI] Research result length: {research.Length} characters");
 
@@ -131,6 +366,8 @@ Console.WriteLine($"[AskAI] Hook: {strategy.Hook}");
                 Research context:
                 {research}
 
+                {memoryPromptSection}
+
                 Task:
                 Write a funny YouTube commentary script based on the topic, angle, and research.
 
@@ -162,14 +399,17 @@ Console.WriteLine($"[AskAI] Hook: {strategy.Hook}");
 
                 """;
 
-                string result = await AskOllamaGenerateAsync(
-                    model,
-                    prompt,
-                    TimeSpan.FromMinutes(90),
-                    temperature: 0.75,
-                    numCtx: 16384,
-                    numPredict: scriptPredictTokens
-                );
+                string result = timing is null
+                    ? await AskOllamaGenerateAsync(
+                        model, prompt, TimeSpan.FromMinutes(90),
+                        temperature: 0.75, numCtx: 16384, numPredict: scriptPredictTokens,
+                        disableThinking: true)
+                    : await timing.MeasureAsync(
+                        "Script generation",
+                        () => AskOllamaGenerateAsync(
+                            model, prompt, TimeSpan.FromMinutes(90),
+                            temperature: 0.75, numCtx: 16384, numPredict: scriptPredictTokens,
+                            disableThinking: true));
 
                 result = result.Trim();
 
@@ -185,7 +425,11 @@ Console.WriteLine($"[AskAI] Hook: {strategy.Hook}");
 
                     Console.WriteLine($"[AskAI] Model requested more research: {searchQuestion}");
 
-                    string extraResearch = await ResearchAI.DeepResearchAsync(searchQuestion);
+                    string extraResearch = timing is null
+                        ? await ResearchAI.DeepResearchAsync(searchQuestion)
+                        : await timing.MeasureAsync(
+                            "Web research",
+                            () => ResearchAI.DeepResearchAsync(searchQuestion));
 
                     research += $"""
 
@@ -220,7 +464,11 @@ Console.WriteLine($"[AskAI] Hook: {strategy.Hook}");
             if (polishWith14b)
 {
     Console.WriteLine("[AskAI] Polishing script with 14B engagement manager...");
-    finalScript = await Ask14bAngCheck(finalScript, targetMinutes);
+    finalScript = timing is null
+        ? await Ask14bAngCheck(finalScript, targetMinutes)
+        : await timing.MeasureAsync(
+            "Optional script polishing",
+            () => Ask14bAngCheck(finalScript, targetMinutes));
 }
 else
 {
@@ -229,20 +477,27 @@ else
 
 string cleanedScript = CleanText(finalScript);
 
-await VideoMemory.SaveVideoSummaryAsync(
-    strategy,
-    cleanedScript,
-    targetMinutes
-);
+SavedVideoMemory savedVideo = timing is null
+    ? await VideoMemory.SaveVideoSummaryAsync(strategy, cleanedScript, targetMinutes)
+    : await timing.MeasureAsync(
+        "Memory and metadata saving",
+        () => VideoMemory.SaveVideoSummaryAsync(strategy, cleanedScript, targetMinutes));
 
-return cleanedScript;
+return new GeneratedScriptResult(cleanedScript, savedVideo);
         }
         catch (Exception ex)
         {
             Console.WriteLine("Ollama or research failed, using fallback script.");
             Console.WriteLine(ex.Message);
 
-            return "Hello. I am EX_01. Anton gave me internet research, a local model, and a 2019 Dell Precision. This is not artificial intelligence. This is a hostage situation with CUDA.";
+            string fallbackScript = "Hello. I am EX_01. Anton gave me internet research, a local model, and a 2019 Dell Precision. This is not artificial intelligence. This is a hostage situation with CUDA.";
+            SavedVideoMemory savedVideo = timing is null
+                ? await VideoMemory.SaveVideoSummaryAsync(strategy, fallbackScript, targetMinutes)
+                : await timing.MeasureAsync(
+                    "Memory and metadata saving",
+                    () => VideoMemory.SaveVideoSummaryAsync(strategy, fallbackScript, targetMinutes));
+
+            return new GeneratedScriptResult(fallbackScript, savedVideo);
         }
     }
 
@@ -302,7 +557,8 @@ return cleanedScript;
                 TimeSpan.FromMinutes(45),
                 temperature: 0.75,
                 numCtx: 8192,
-                numPredict: polishPredictTokens
+                numPredict: polishPredictTokens,
+                disableThinking: true
             );
 
             result = result.Trim();
@@ -329,151 +585,219 @@ return cleanedScript;
         TimeSpan timeout,
         double temperature = 0.7,
         int numCtx = 8192,
-        int numPredict = 700)
+        int numPredict = 700,
+        bool disableThinking = false)
+    {
+        OllamaGenerationResult result = await AskOllamaGenerateDetailedAsync(
+            model,
+            prompt,
+            timeout,
+            temperature,
+            numCtx,
+            numPredict,
+            disableThinking);
+        return result.Text;
+    }
+
+    private static async Task<OllamaGenerationResult> AskOllamaGenerateDetailedAsync(
+        string model,
+        string prompt,
+        TimeSpan timeout,
+        double temperature = 0.7,
+        int numCtx = 8192,
+        int numPredict = 700,
+        bool disableThinking = false)
     {
         using HttpClient client = new()
         {
             Timeout = timeout
         };
 
-        var body = new
+        OllamaGenerateRequest body = new()
         {
-            model,
-            prompt,
-            stream = true,
-            options = new
+            Model = model,
+            Prompt = prompt,
+            Stream = true,
+            Think = disableThinking ? false : null,
+            Options = new OllamaGenerateOptions
             {
-                temperature,
-                num_ctx = numCtx,
-                num_predict = numPredict
+                Temperature = temperature,
+                NumContextTokens = numCtx,
+                MaximumOutputTokens = numPredict
             }
         };
 
         Console.WriteLine($"[Ollama] Starting model: {model}");
         Console.WriteLine($"[Ollama] Context: {numCtx}, Max output tokens: {numPredict}");
         Console.WriteLine($"[Ollama] Prompt length: {prompt.Length} characters");
+        if (disableThinking)
+            Console.WriteLine("[Ollama] Thinking disabled for direct script generation.");
         Console.WriteLine("[Ollama] Sending request...");
 
-        using HttpRequestMessage request = new(
-            HttpMethod.Post,
-            "http://localhost:11434/api/generate"
-        );
-
-        request.Content = JsonContent.Create(body);
-
-        using HttpResponseMessage response = await client.SendAsync(
-            request,
-            HttpCompletionOption.ResponseHeadersRead
-        );
-
-        response.EnsureSuccessStatusCode();
-
-        Console.WriteLine("[Ollama] Response started. Waiting for tokens...\n");
-
-        await using Stream stream = await response.Content.ReadAsStreamAsync();
-        using StreamReader reader = new(stream);
-
-        StringBuilder fullText = new();
-
-        DateTime startTime = DateTime.Now;
-        DateTime lastChunkTime = DateTime.Now;
-
-        int chunks = 0;
-        bool done = false;
-
-        while (!done)
+        HttpResponseMessage response = await SendOllamaRequestAsync(client, body);
+        if (!response.IsSuccessStatusCode)
         {
-            Task<string?> readTask = reader.ReadLineAsync();
+            string errorBody = await response.Content.ReadAsStringAsync();
+            bool thinkUnsupported = disableThinking &&
+                errorBody.Contains("think", StringComparison.OrdinalIgnoreCase) &&
+                (errorBody.Contains("unknown", StringComparison.OrdinalIgnoreCase) ||
+                 errorBody.Contains("unsupported", StringComparison.OrdinalIgnoreCase) ||
+                 errorBody.Contains("unrecognized", StringComparison.OrdinalIgnoreCase));
+            response.Dispose();
 
-            while (!readTask.IsCompleted)
+            if (!thinkUnsupported)
+                throw new HttpRequestException(
+                    $"Ollama request failed: {(int)response.StatusCode} {errorBody.Trim()}");
+
+            Console.WriteLine(
+                "[Ollama] Installed server rejected the think field; retrying with /no_think compatibility mode.");
+            body.Think = null;
+            body.Prompt = "/no_think\n\n" + prompt;
+            response = await SendOllamaRequestAsync(client, body);
+        }
+
+        using (response)
+        {
+            response.EnsureSuccessStatusCode();
+
+            Console.WriteLine("[Ollama] Response started. Waiting for tokens...");
+
+            await using Stream stream = await response.Content.ReadAsStreamAsync();
+            using StreamReader reader = new(stream);
+
+            StringBuilder fullText = new();
+
+            DateTime startTime = DateTime.Now;
+            DateTime lastChunkTime = DateTime.Now;
+
+            int chunks = 0;
+            bool done = false;
+            string doneReason = "";
+            int outputTokenCount = 0;
+
+            while (!done)
             {
-                await Task.WhenAny(readTask, Task.Delay(TimeSpan.FromSeconds(30)));
+                Task<string?> readTask = reader.ReadLineAsync();
 
-                if (!readTask.IsCompleted)
+                while (!readTask.IsCompleted)
                 {
-                    double totalMinutes = (DateTime.Now - startTime).TotalMinutes;
-                    double silentSeconds = (DateTime.Now - lastChunkTime).TotalSeconds;
+                    await Task.WhenAny(readTask, Task.Delay(TimeSpan.FromSeconds(30)));
 
-                    Console.WriteLine();
-                    Console.WriteLine($"[Ollama] Still waiting... total: {totalMinutes:F1} min, silence: {silentSeconds:F0}s, chunks: {chunks}");
-                    Console.WriteLine("[Ollama] If VRAM/RAM is active, it is probably still prompt-evaluating.");
-                }
-            }
-
-            string? line = await readTask;
-
-            if (line is null)
-                break;
-
-            if (string.IsNullOrWhiteSpace(line))
-                continue;
-
-            JsonDocument doc;
-
-            try
-            {
-                doc = JsonDocument.Parse(line);
-            }
-            catch
-            {
-                Console.WriteLine();
-                Console.WriteLine("[Ollama] Warning: failed to parse one streamed JSON line.");
-                continue;
-            }
-
-            using (doc)
-            {
-                JsonElement root = doc.RootElement;
-
-                if (root.TryGetProperty("response", out JsonElement responseElement))
-                {
-                    string piece = responseElement.GetString() ?? "";
-
-                    if (!string.IsNullOrEmpty(piece))
+                    if (!readTask.IsCompleted)
                     {
-                        Console.Write(piece);
-                        fullText.Append(piece);
-                        chunks++;
-                        lastChunkTime = DateTime.Now;
+                        double totalMinutes = (DateTime.Now - startTime).TotalMinutes;
+                        double silentSeconds = (DateTime.Now - lastChunkTime).TotalSeconds;
+
+                        Console.WriteLine(
+                            $"[Ollama] Still waiting... total: {totalMinutes:F1} min, " +
+                            $"silence: {silentSeconds:F0}s, chunks: {chunks}");
                     }
                 }
 
-                if (root.TryGetProperty("done", out JsonElement doneElement) &&
-                    doneElement.GetBoolean())
+                string? line = await readTask;
+
+                if (line is null)
+                    break;
+
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                JsonDocument doc;
+
+                try
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("\n[Ollama] Model finished.");
+                    doc = JsonDocument.Parse(line);
+                }
+                catch
+                {
+                    Console.WriteLine("[Ollama] Warning: failed to parse one streamed JSON line.");
+                    continue;
+                }
 
-                    if (root.TryGetProperty("total_duration", out JsonElement totalDurationElement))
+                using (doc)
+                {
+                    JsonElement root = doc.RootElement;
+
+                    // Deliberately ignore any `thinking` field. Hidden reasoning is never printed or
+                    // included in the narration returned to callers.
+                    if (root.TryGetProperty("response", out JsonElement responseElement))
                     {
-                        long totalNs = totalDurationElement.GetInt64();
-                        double totalSeconds = totalNs / 1_000_000_000.0;
-                        Console.WriteLine($"[Ollama] Total time: {totalSeconds:F1}s");
-                    }
+                        string piece = responseElement.GetString() ?? "";
 
-                    if (root.TryGetProperty("eval_count", out JsonElement evalCountElement) &&
-                        root.TryGetProperty("eval_duration", out JsonElement evalDurationElement))
-                    {
-                        int evalCount = evalCountElement.GetInt32();
-                        long evalNs = evalDurationElement.GetInt64();
-                        double evalSeconds = evalNs / 1_000_000_000.0;
-
-                        if (evalSeconds > 0)
+                        if (!string.IsNullOrEmpty(piece))
                         {
-                            double tokensPerSecond = evalCount / evalSeconds;
-                            Console.WriteLine($"[Ollama] Output tokens: {evalCount}");
-                            Console.WriteLine($"[Ollama] Speed: {tokensPerSecond:F2} tok/s");
+                            fullText.Append(piece);
+                            chunks++;
+                            lastChunkTime = DateTime.Now;
                         }
                     }
 
-                    done = true;
+                    if (root.TryGetProperty("done", out JsonElement doneElement) &&
+                        doneElement.GetBoolean())
+                    {
+                        Console.WriteLine("[Ollama] Model finished.");
+
+                        if (root.TryGetProperty("done_reason", out JsonElement doneReasonElement))
+                            doneReason = doneReasonElement.GetString() ?? "";
+
+                        if (root.TryGetProperty("total_duration", out JsonElement totalDurationElement))
+                        {
+                            long totalNs = totalDurationElement.GetInt64();
+                            double totalSeconds = totalNs / 1_000_000_000.0;
+                            Console.WriteLine($"[Ollama] Total time: {totalSeconds:F1}s");
+                        }
+
+                        if (root.TryGetProperty("eval_count", out JsonElement evalCountElement))
+                        {
+                            outputTokenCount = evalCountElement.GetInt32();
+                            Console.WriteLine($"[Ollama] Output tokens: {outputTokenCount}");
+                            if (root.TryGetProperty("eval_duration", out JsonElement evalDurationElement))
+                            {
+                                long evalNs = evalDurationElement.GetInt64();
+                                double evalSeconds = evalNs / 1_000_000_000.0;
+                                if (evalSeconds > 0)
+                                    Console.WriteLine(
+                                        $"[Ollama] Speed: {outputTokenCount / evalSeconds:F2} tok/s");
+                            }
+                        }
+
+                        done = true;
+                    }
                 }
             }
+
+            bool reachedLimit =
+                doneReason.Equals("length", StringComparison.OrdinalIgnoreCase) ||
+                doneReason.Equals("max_tokens", StringComparison.OrdinalIgnoreCase) ||
+                outputTokenCount >= numPredict;
+            if (reachedLimit)
+            {
+                Console.WriteLine(
+                    $"[Ollama] Generation reached its output-token limit " +
+                    $"({outputTokenCount}/{numPredict}); output will require validation and retry.");
+            }
+
+            return new OllamaGenerationResult
+            {
+                Text = fullText.ToString(),
+                Completed = done,
+                DoneReason = doneReason,
+                OutputTokenCount = outputTokenCount,
+                MaximumOutputTokens = numPredict,
+                ReachedOutputTokenLimit = reachedLimit
+            };
         }
+    }
 
-        Console.WriteLine();
-
-        return fullText.ToString();
+    private static async Task<HttpResponseMessage> SendOllamaRequestAsync(
+        HttpClient client,
+        OllamaGenerateRequest body)
+    {
+        using HttpRequestMessage request = new(
+            HttpMethod.Post,
+            "http://localhost:11434/api/generate");
+        request.Content = JsonContent.Create(body);
+        return await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
     }
 
     private static string CleanText(string text)
